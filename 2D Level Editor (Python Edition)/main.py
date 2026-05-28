@@ -20,11 +20,13 @@ class App:
 
         pg.init();
         self.screen = pg.display.set_mode(self.settings["SCREEN_SIZE"])
+        pg.display.set_caption(self.settings["APP_NAME"])
         self.clock = pg.time.Clock()
         self.frames = []
-        self.temp = Frame(100, 200, 400, 300)
-        btn = Button(100, 100, "res/main_font.otf", size = 25, padding = 14)
-        self.btn_id = self.temp.add_child(btn)
+        self.temp = Frame(100, 100, 500, 350)
+        self.btn = Button(0.1, 0.1, self.settings["MAIN_FONT"], size = 25, padding = 14, bd_radius = 20)
+        self.btn.toggle_key_binding(pg.K_a)
+        self.temp.add_child(self.btn)
         self.temp.set_bg("#01100a")
 
     def load_main_settings(self):
@@ -46,11 +48,10 @@ class App:
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False
                 if event.type == pg.KEYDOWN and event.key == pg.K_k:
-                    self.temp.delete_child(self.btn_id)
+                    self.temp.delete_child(self.btn)
+                self.temp.update(event)
 
             self.screen.fill("black")
-
-            self.temp.update()
 
             self.temp.draw(self.screen)
 

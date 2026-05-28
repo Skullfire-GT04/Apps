@@ -1,0 +1,26 @@
+{
+    "button" : {
+        "bg" : "#1E56BE",
+        "fg" : "#E7E7E7",
+        "btn_hvr_clr" : "#4378E0"
+    },
+    "label" : {
+        "bg" : "",
+        "fg" : ""
+    },
+    "input" : {
+        "bg" : "",
+        "fg" : "",
+        "bd_clr" : ""
+    },
+    "frame" : {
+        "bg" : "",
+        "bd_clr" : ""
+    },
+    "slider" : {
+        "bg" : "",
+        "btn_bg" : "",
+        "btn_hvr_clr" : "",
+        "fill_clr" : ""
+    }
+}
