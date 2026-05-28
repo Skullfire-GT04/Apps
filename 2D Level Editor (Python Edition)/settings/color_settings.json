@@ -9,7 +9,7 @@
         "bg" : "#3C3744",
         "fg" : "#FBFFF1"
     },
-    "input" : {
+    "console" : {
         "bg" : "",
         "fg" : "",
         "bd_clr" : ""
@@ -23,5 +23,10 @@
         "btn_bg" : "",
         "btn_hvr_clr" : "",
         "fill_clr" : ""
+    },
+    "check_button" : {
+        "unchecked_bg" : "",
+        "checked_bg" : "",
+        "fg" : ""
     }
 }

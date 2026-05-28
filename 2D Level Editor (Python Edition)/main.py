@@ -25,10 +25,10 @@ class App:
         pg.display.set_caption(self.settings["APP_NAME"])
         self.clock = pg.time.Clock()
         self.frames = []
-        self.temp = BorderFrame(100, 100, 500, 350, 10)
+        self.temp = Frame(0.1, 0.1, 0.5, 0.8, 10)
         self.btn = Button(0.1, 0.1, self.settings["MAIN_FONT"], size = 25, padding = 14, bd_radius = 20)
         self.btn.toggle_key_binding(pg.K_a)
-        self.label = Label(0.1, 0.5, self.settings["MAIN_FONT"], text_size = 25)
+        self.label = Label(0.1, 0.3, self.settings["MAIN_FONT"], text_size = 25)
         self.temp.add_child(self.btn)
         self.temp.add_child(self.label)
         self.temp.set_bg("#01100a")
@@ -49,6 +49,9 @@ class App:
     def run(self):
         while self.running:
             for event in pg.event.get():
+                # checking if the main_window was resized
+                if event.type == pg.VIDEORESIZE:
+                    pass
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False                    
                 if event.type == pg.KEYDOWN and event.key == pg.K_k:
