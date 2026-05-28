@@ -2,11 +2,12 @@
     "button" : {
         "bg" : "#1E56BE",
         "fg" : "#E7E7E7",
-        "btn_hvr_clr" : "#4378E0"
+        "btn_hvr_clr" : "#4378E0",
+        "bd_clr" : "#121212"
     },
     "label" : {
-        "bg" : "",
-        "fg" : ""
+        "bg" : "#3C3744",
+        "fg" : "#FBFFF1"
     },
     "input" : {
         "bg" : "",
@@ -14,8 +15,8 @@
         "bd_clr" : ""
     },
     "frame" : {
-        "bg" : "",
-        "bd_clr" : ""
+        "bg" : "#121212",
+        "bd_clr" : "#242424"
     },
     "slider" : {
         "bg" : "",

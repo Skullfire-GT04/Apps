@@ -53,5 +53,5 @@ class Widget:
     def draw(self):
         pass
 
-    def update(self):
+    def update(self, event : pg.event.Event):
         pass

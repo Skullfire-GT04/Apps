@@ -7,7 +7,9 @@ import pygame as pg
 from json import load
 from utils.widget import *
 from utils.frame import *
+from utils.border_frame import BorderFrame
 from utils.button import Button
+from utils.label import Label
 
 class App:
     def __init__(self):
@@ -23,10 +25,12 @@ class App:
         pg.display.set_caption(self.settings["APP_NAME"])
         self.clock = pg.time.Clock()
         self.frames = []
-        self.temp = Frame(100, 100, 500, 350)
+        self.temp = BorderFrame(100, 100, 500, 350, 10)
         self.btn = Button(0.1, 0.1, self.settings["MAIN_FONT"], size = 25, padding = 14, bd_radius = 20)
         self.btn.toggle_key_binding(pg.K_a)
+        self.label = Label(0.1, 0.5, self.settings["MAIN_FONT"], text_size = 25)
         self.temp.add_child(self.btn)
+        self.temp.add_child(self.label)
         self.temp.set_bg("#01100a")
 
     def load_main_settings(self):
@@ -46,9 +50,9 @@ class App:
         while self.running:
             for event in pg.event.get():
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
-                    self.running = False
+                    self.running = False                    
                 if event.type == pg.KEYDOWN and event.key == pg.K_k:
-                    self.temp.delete_child(self.btn)
+                    self.label.set_text("Hello there matey!")
                 self.temp.update(event)
 
             self.screen.fill("black")

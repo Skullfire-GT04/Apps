@@ -9,14 +9,13 @@ class for all widgets defined in this folder
 
 class Frame(Widget):
 
-    def __init__(self, x : int, y : int, width : int, height : int, full_screen_mode = False, bd_radius = 10):
+    def __init__(self, x : int, y : int, width : int, height : int, bd_radius = 10):
         super().__init__(x, y, width, height)
         self.type = "frame"
-        self.full_screen_mode = full_screen_mode
         self.bd_radius = bd_radius
-        self.bg = "#01011a" # a bluish black color
         self.id_count = 0
         self.children = {} # this list will contain all the child widgets contained inside this frame
+        self.load_color_settings("frame")
         
         # this dictionary is what defines which type of 
         # children are eligible to be nested inside a frame
@@ -37,7 +36,7 @@ class Frame(Widget):
 
     # draws the frame on a given surface
     def draw(self, display : pg.Surface):
-        pg.draw.rect(display, self.bg, pg.Rect(self.x, self.y, self.width, self.height), border_radius = self.bd_radius)
+        pg.draw.rect(display, self.clr_settings["bg"], pg.Rect(self.x, self.y, self.width, self.height), border_radius = self.bd_radius)
 
         for child in self.children.values():
             child.draw(display)

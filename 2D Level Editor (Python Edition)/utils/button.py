@@ -44,7 +44,7 @@ class Button(Widget):
         pg.draw.rect(display, self.clr_settings["bg"] if not self.hovering else self.clr_settings["btn_hvr_clr"], pg.Rect(rect_x, rect_y, self.width, self.height), border_radius = self.bd_radius)
 
         # drawing the text
-        text_surf = self.font.render(self.text, False, self.clr_settings["fg"])
+        text_surf = self.font.render(self.text, True, self.clr_settings["fg"])
         text_rect = text_surf.get_rect(topleft = (rect_x + self.padding, rect_y + self.padding))
         display.blit(text_surf, text_rect)
 
