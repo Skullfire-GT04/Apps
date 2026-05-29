@@ -25,13 +25,15 @@ class App:
         pg.display.set_caption(self.settings["APP_NAME"])
         self.clock = pg.time.Clock()
         self.frames = []
-        self.temp = Frame(0.1, 0.1, 0.5, 0.8, 10)
-        self.btn = Button(0.1, 0.1, self.settings["MAIN_FONT"], size = 25, padding = 14, bd_radius = 20)
-        self.btn.toggle_key_binding(pg.K_a)
-        self.label = Label(0.1, 0.3, self.settings["MAIN_FONT"], text_size = 25)
+        self.independent_widgets = []
+        self.temp = BorderFrame(0.01, 0, 0.3, 1, 10)
+        self.btn = Button(0.1, 0.1, 0.7, 0.14, self.settings["MAIN_FONT"], text_size = 25, padding = 10, bd_radius = 20, text = "Click me !")
+        self.label = Label(0.1, 0.3, 0.7, 0.23, self.settings["MAIN_FONT"], text_size = 20)
+        self.btn.set_command(self.change_text)
+        self.independent_widgets.append(Label(0.7, 0.5, 0.3, 0.23, self.settings["MAIN_FONT"], text = "Label2", text_size = 30))
         self.temp.add_child(self.btn)
         self.temp.add_child(self.label)
-        self.temp.set_bg("#01100a")
+        self.counter = 0
 
     def load_main_settings(self):
         try:
@@ -45,13 +47,18 @@ class App:
     def update(self):
         pass
 
+    def change_text(self):
+        self.counter += 1
+        self.label.set_text(f"Counter: {self.counter}   ")
+
     # the main loop for the app
     def run(self):
         while self.running:
             for event in pg.event.get():
-                # checking if the main_window was resized
+                # checking if the main_window was resized if so then changing the stand-along widgets accordingly
                 if event.type == pg.VIDEORESIZE:
-                    pass
+                    for widget in self.independent_widgets:
+                        widget.calc_new_rect()
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False                    
                 if event.type == pg.KEYDOWN and event.key == pg.K_k:
@@ -61,6 +68,10 @@ class App:
             self.screen.fill("black")
 
             self.temp.draw(self.screen)
+            
+            # drawing the independent widgets on top of the frames
+            for i in range(len(self.independent_widgets)):
+                self.independent_widgets[i].draw(self.screen)
 
             pg.display.update()
             self.clock.tick(self.settings["FPS"])

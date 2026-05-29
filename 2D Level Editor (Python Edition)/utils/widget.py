@@ -12,7 +12,6 @@ class Widget:
         self.x = x 
         self.y = y
         self.rect = None
-        self.are_dimensions_absolute = False
         self.type = "widget"
         self.clr_settings = None
         self.id = None
@@ -40,20 +39,17 @@ class Widget:
         self.id = id_
 
     def get_absolute_width(self):
-        if not self.are_dimensions_absolute:
-            if not self.parent:
-                return self.width * pg.display.get_window_size()[0]
-            else:
-                return self.width * self.parent.get_absolute_width()
-        else: return self.width
+        if not self.parent:
+            return self.width * pg.display.get_window_size()[0]
+        else:
+            return self.width * self.parent.get_absolute_width()
+        
         
     def get_absolute_height(self):
-        if not self.are_dimensions_absolute:
-            if not self.parent:
-                return self.height * pg.display.get_window_size()[1]
-            else:
-                return self.height * self.parent.get_absolute_height()
-        else: return self.height
+        if not self.parent:
+            return self.height * pg.display.get_window_size()[1]
+        else:
+            return self.height * self.parent.get_absolute_height()
         
     def get_absolute_pos(self):
         if not self.parent:
@@ -73,3 +69,19 @@ class Widget:
 
     def update(self, event : pg.event.Event):
         pass
+
+    def change_width(self, new_width : float):
+        self.width = new_width
+        self.calc_new_rect()
+
+    def change_height(self, new_height : float):
+        self.height = new_height
+        self.calc_new_rect()
+
+    def change_x(self, new_x : float):
+        self.x = new_x
+        self.calc_new_rect()
+    
+    def change_y(self, new_y : float):
+        self.y = new_y
+        self.calc_new_rect()
