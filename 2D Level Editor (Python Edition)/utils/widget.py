@@ -60,15 +60,19 @@ class Widget:
             y = temp[1] + (self.parent.get_absolute_height() * self.y)
             return (x, y)
     
+    # calculates absolute positions and dimensions for the widget's rect
     def calc_new_rect(self) -> pg.Rect:
         pos = self.get_absolute_pos()
         self.rect = pg.Rect(pos[0], pos[1], self.get_absolute_width(), self.get_absolute_height())
 
     def draw(self):
         pass
-
+    
+    # default updates for all types of widgets
     def update(self, event : pg.event.Event):
-        pass
+        if event.type == pg.VIDEORESIZE:
+            self.calc_new_rect()
+            return
 
     def change_width(self, new_width : float):
         self.width = new_width
@@ -84,4 +88,7 @@ class Widget:
     
     def change_y(self, new_y : float):
         self.y = new_y
+        self.calc_new_rect()
+
+    def parent_changes(self):
         self.calc_new_rect()

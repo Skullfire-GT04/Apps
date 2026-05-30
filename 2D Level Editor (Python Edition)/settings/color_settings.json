@@ -10,9 +10,9 @@
         "fg" : "#FBFFF1"
     },
     "console" : {
-        "bg" : "",
-        "fg" : "",
-        "bd_clr" : ""
+        "bg" : "#2D3142",
+        "fg" : "#FFFFFF",
+        "bd_clr" : "#BFC0C0"
     },
     "frame" : {
         "bg" : "#121212",
@@ -28,5 +28,11 @@
         "unchecked_bg" : "",
         "checked_bg" : "",
         "fg" : ""
+    },
+    "input" : {
+        "bg" : "",
+        "fg" : "",
+        "bd_clr" : "",
+        "active_bd_clr" : ""
     }
 }

@@ -18,24 +18,11 @@ class Button(Label):
         self.load_color_settings("button")
         self.type = "button"
 
-    # settings a new text to the button and also changing 
-    # the size of the button accordingly
-    def set_text(self, new_text : str):
-        self.text = new_text
-        self.text_width, self.text_height = self.font.size(self.text)
-        if self.parent:
-            self.width = (self.text_width + 2 * self.padding) / self.parent.rect.width
-            self.height = (self.text_height + 2 * self.padding) / self.parent.rect.height
-            self.are_dimensions_absolute = False
-        else:
-            self.width = self.text_width + 2 * self.padding
-            self.height = self.text_height + 2 * self.padding
-            self.are_dimensions_absolute = True
-        self.calc_new_rect()
-
     # draws the button onto the screen
     def draw(self, display : pg.Surface):
         temp = self.rect.copy()
+        temp.x -= self.padding
+        temp.y -= self.padding
         temp.width += 2 * self.padding
         temp.height += 2 * self.padding
         pg.draw.rect(display, self.clr_settings["bg"] if not self.hovering else self.clr_settings["btn_hvr_clr"], temp, border_radius = self.bd_radius)
@@ -57,17 +44,16 @@ class Button(Label):
     def update(self, event : pg.event.Event):
         super().update(event)
 
-        x = self.rect.x 
-        y = self.rect.y
-
         # checking if the event is mouse related and the mouse pointer collides with the button area
         if hasattr(event, "pos"):
+            x = self.rect.x 
+            y = self.rect.y
             if not (x <= event.pos[0] <= x + self.rect.width and y <= event.pos[1] <= y + self.rect.height):
                 self.hovering = False
                 return
         
         # checking for key bindings
-        if hasattr(event, "key"):
+        if hasattr(event, "key") and event.type == pg.KEYDOWN:
             if self.bindings.get(event.key, None):
                 self.command()
                 return

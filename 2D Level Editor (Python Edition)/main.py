@@ -8,6 +8,7 @@ from json import load
 from utils.widget import *
 from utils.frame import *
 from utils.border_frame import BorderFrame
+from utils.console import Console
 from utils.button import Button
 from utils.label import Label
 
@@ -29,8 +30,10 @@ class App:
         self.temp = BorderFrame(0.01, 0, 0.3, 1, 10)
         self.btn = Button(0.1, 0.1, 0.7, 0.14, self.settings["MAIN_FONT"], text_size = 25, padding = 10, bd_radius = 20, text = "Click me !")
         self.label = Label(0.1, 0.3, 0.7, 0.23, self.settings["MAIN_FONT"], text_size = 20)
+        self.console = Console(0.4, 0.9, 0.2, 0.03, self.settings["MAIN_FONT"])
         self.btn.set_command(self.change_text)
         self.independent_widgets.append(Label(0.7, 0.5, 0.3, 0.23, self.settings["MAIN_FONT"], text = "Label2", text_size = 30))
+        self.independent_widgets.append(self.console)
         self.temp.add_child(self.btn)
         self.temp.add_child(self.label)
         self.counter = 0
@@ -49,7 +52,7 @@ class App:
 
     def change_text(self):
         self.counter += 1
-        self.label.set_text(f"Counter: {self.counter}   ")
+        self.label.set_text(f"Counter: {self.counter}")
 
     # the main loop for the app
     def run(self):

@@ -45,14 +45,9 @@ class Frame(Widget):
             if not (x <= event.pos[0] <= x + self.rect.width and y <= event.pos[1] <= y + self.rect.height): return    
 
         if event.type == pg.VIDEORESIZE:
-            print("Parent widgets section:")
-            print("Parent old rect : ", self.rect)
-            self.calc_new_rect()
-            print("Parent new rect : ", self.rect)
+            super().update(event)
             for child in self.children.keys():
-                print("Old rect : ", self.children[child].rect, self.children[child].type)
                 self.children[child].update(event)
-                print("New rect : ", self.children[child].rect)
             return
 
         for child_type in EVENT_MAP.get(event.type, tuple()):
@@ -75,3 +70,23 @@ class Frame(Widget):
         self.child_grouping[self.child_event_map[child.type]][self.id_count] = child
         child.id = self.id_count
         self.id_count += 1
+
+    def change_children(self):
+        for child in self.children:
+            child.parent_changes()
+    
+    def change_x(self, new_x):
+        super().change_x(new_x)
+        self.change_children()
+    
+    def change_y(self, new_y):
+        super().change_y(new_y)
+        self.change_children()
+
+    def change_height(self, new_height):
+        super().change_height(new_height)
+        self.change_children()
+    
+    def change_width(self, new_width):
+        super().change_width(new_width)
+        self.change_children()

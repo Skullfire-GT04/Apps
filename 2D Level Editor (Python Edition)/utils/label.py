@@ -23,8 +23,6 @@ class Label(Widget):
         self.load_color_settings("label")
         self.type = "label"
         self.calc_new_rect()
-        self.calc_display_text()
-        self.calc_text_pos()
 
     # sets a new text for the label
     def set_text(self, new_text : str):
@@ -34,22 +32,22 @@ class Label(Widget):
         self.calc_text_pos()
 
     def calc_display_text(self):
-        temp = ""
-        index = 0
-        while self.font.size(temp)[0] <= self.rect.width and index < len(self.text):
-            temp += self.text[index]
+        index = 1
+        while self.font.size(self.text[:index])[0] <= self.rect.width + 2 * self.padding and index < len(self.text):
             index += 1
-        self.actual_display_text = temp[:len(temp)]
+        self.actual_display_text = self.text[:index]
 
     def calc_text_pos(self):
         text_width, text_height = self.font.size(self.actual_display_text)
-        self.text_starting_y = (self.rect.height - text_height + 2 * self.padding) / 2 + self.rect.y
-        self.text_starting_x = (self.rect.width + 2 * self.padding - text_width) / 2 + self.rect.x
+        self.text_starting_y = (self.rect.height - text_height) / 2 + self.rect.y
+        self.text_starting_x = (self.rect.width - text_width) / 2 + self.rect.x
 
     # draws the label onto the screen
     def draw(self, display : pg.Surface):
         # drawing the box around the text
         temp = self.rect.copy()
+        temp.x -= self.padding
+        temp.y -= self.padding
         temp.width += 2 * self.padding
         temp.height += 2 * self.padding
         pg.draw.rect(display, self.clr_settings["bg"], temp, border_radius = self.bd_radius)
@@ -59,11 +57,6 @@ class Label(Widget):
         text_rect = text_surf.get_rect(topleft = (self.text_starting_x, self.text_starting_y))
 
         display.blit(text_surf, text_rect)
-
-    def update(self, event : pg.event.Event):
-        if event.type == pg.VIDEORESIZE:
-            self.calc_new_rect()
-            return
 
     def change_width(self, new_width):
         super().change_width(new_width)
@@ -80,5 +73,13 @@ class Label(Widget):
 
     def calc_new_rect(self):
         super().calc_new_rect()
+        self.calc_display_text()
+        self.calc_text_pos()
+
+    # calculates the changes in self when parent changes
+    # dimensions or coordinates
+    def parent_changes(self):
+        if not self.parent: return
+        super().parent_changes()
         self.calc_display_text()
         self.calc_text_pos()
