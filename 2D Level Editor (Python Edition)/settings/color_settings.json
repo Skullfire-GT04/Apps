@@ -30,9 +30,11 @@
         "fg" : ""
     },
     "input" : {
-        "bg" : "",
-        "fg" : "",
-        "bd_clr" : "",
-        "active_bd_clr" : ""
+        "bg" : "#32324B",
+        "fg" : "#F8E9E5",
+        "placeholder_fg" : "#858585",
+        "bd_clr" : "#0F0F17",
+        "active_bd_clr" : "#79C7C5",
+        "tick_clr" : "#4ac7c4"
     }
 }

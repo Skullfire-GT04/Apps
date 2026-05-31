@@ -4,10 +4,11 @@ from utils.label import Label
 
 class Console(Label):
 
-    def __init__(self, x : float, y : float, width, height, font, bd_radius = 20, text_size = 15, padding = 10, border_width = 3):
+    def __init__(self, x : float, y : float, width, height, font : str, bd_radius = 20, text_size = 15, padding = 10, border_width = 3):
         super().__init__(x, y, width, height, font, bd_radius, "Console Output", padding, text_size)
         self.load_color_settings("console")
         self.bd_width = border_width
+        self.text = ""
 
     def draw(self, display):
         temp = self.rect.copy()
