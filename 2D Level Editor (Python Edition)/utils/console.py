@@ -1,6 +1,9 @@
 import pygame as pg
 from utils.label import Label
 
+"""
+Conceptually this is just a label with a border
+"""
 
 class Console(Label):
 
@@ -8,9 +11,10 @@ class Console(Label):
         super().__init__(x, y, width, height, font, bd_radius, "Console Output", padding, text_size)
         self.load_color_settings("console")
         self.bd_width = border_width
-        self.text = ""
+        self.text = "Console Output"
 
     def draw(self, display):
+        # adding the border around the text box
         temp = self.rect.copy()
         temp.x -= self.padding + self.bd_width
         temp.y -= self.padding + self.bd_width

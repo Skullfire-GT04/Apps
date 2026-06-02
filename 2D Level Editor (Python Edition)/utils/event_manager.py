@@ -4,23 +4,15 @@ import pygame as pg
 
 WIDGET_TYPES_ALL = ("frame", "button", "label", "slider", "console", "input", "check_button")
 
-# custom events
-INPUT_BOX_TICK_EVENT = pg.USEREVENT + 1
-
-# special events widgets customizations
-TICK_EVENT_WIDGETS = tuple(["input"])
 
 # event mapping for widget types
 EVENT_MAP = {
-    pg.MOUSEMOTION : ("button", "label", "slider", "check_button"),
+    pg.MOUSEMOTION : ("button", "label", "slider", "check_button", "input"),
     pg.MOUSEBUTTONDOWN : ("button", "input", "slider", "check_button"),
     pg.MOUSEBUTTONUP : ("button", "input", "slider"),
     pg.KEYDOWN : ("button", "input"),
-    pg.KEYUP : ("button", "input"),
-    INPUT_BOX_TICK_EVENT : TICK_EVENT_WIDGETS
+    pg.KEYUP : ("button", "input")
 }
 
-
-# should only be called after pg.init() has been called
-def init_tick_event():
-    pg.time.set_timer(INPUT_BOX_TICK_EVENT, 250)
+# timed events
+INPUT_BOX_TICK_SPEED = 2 # per second

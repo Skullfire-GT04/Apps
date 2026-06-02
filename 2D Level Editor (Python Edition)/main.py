@@ -11,8 +11,7 @@ from utils.border_frame import BorderFrame
 from utils.console import Console
 from utils.button import Button
 from utils.label import Label
-from utils.event_manager import init_tick_event
-from utils.input_box import InputBox, INPUT_BOX_TICK_EVENT
+from utils.input_box import InputBox
 
 class App:
     def __init__(self):
@@ -35,13 +34,12 @@ class App:
         self.console = Console(0.4, 0.9, 0.2, 0.03, self.settings["MAIN_FONT"])
         self.btn.set_command(self.change_text)
         self.independent_widgets.append(Label(0.7, 0.5, 0.3, 0.23, self.settings["MAIN_FONT"], text = "Label2", text_size = 30))
-        self.in_box = InputBox(0.1, 0.7, 0.8, 0.04, self.settings["MAIN_FONT"])
+        self.in_box = InputBox(0.1, 0.7, 0.5, 0.02, self.settings["MAIN_FONT"], text_size = 15)
         self.independent_widgets.append(self.console)
         self.temp.add_child(self.btn)
         self.temp.add_child(self.label)
         self.temp.add_child(self.in_box)
         self.counter = 0
-        init_tick_event()
 
     def load_main_settings(self):
         try:

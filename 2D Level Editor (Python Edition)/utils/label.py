@@ -26,7 +26,6 @@ class Label(Widget):
 
     # sets a new text for the label
     def set_text(self, new_text : str):
-        if not new_text: return
         self.text = new_text
         self.calc_display_text()
         self.calc_text_pos()

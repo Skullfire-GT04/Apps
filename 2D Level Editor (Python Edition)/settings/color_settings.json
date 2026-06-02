@@ -19,10 +19,10 @@
         "bd_clr" : "#242424"
     },
     "slider" : {
-        "bg" : "",
-        "btn_bg" : "",
-        "btn_hvr_clr" : "",
-        "fill_clr" : ""
+        "bg" : "#3F617D",
+        "btn_bg" : "#FBFCFF",
+        "btn_hvr_clr" : "#D8D5D8",
+        "fill_clr" : "#308DAF"
     },
     "check_button" : {
         "unchecked_bg" : "",
