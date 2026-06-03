@@ -57,6 +57,12 @@ class InputBox(Console):
         self.text_starting_y = (self.rect.height - text_height) / 2 + self.rect.y
         self.text_starting_x = self.rect.x
 
+    def calc_display_text(self):
+        count = 1
+        while self.font.size(self.text[len(self.text) - count - 1:len(self.text)])[0] <= self.rect.width and count < len(self.text):
+            count += 1
+        self.actual_display_text = self.text[len(self.text) - count:len(self.text)]
+
     # adds or removes not allowed characters
     def toggle_not_allowed_char(self, char : str):
         if not isinstance(char, str): return
@@ -96,5 +102,5 @@ class InputBox(Console):
                 self.set_text(self.text + event.unicode)
             else:
                 self.set_text(self.text[:-1] if len(self.text) > 1 else "")
-            self.typed_in = True
+            self.typed_in = True if len(self.text) else False
 

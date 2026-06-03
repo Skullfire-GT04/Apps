@@ -13,6 +13,55 @@ class Slider(Widget):
         self.value = from_
         self.orient = orient
         self.bd_radius = border_radius
+        self.hovering = False
+        self.selected = False
+        self.calc_new_rect()
+        self.btn_rect = None
+
+    # sets a new value 
+    def set_value(self, new_val : int):
+        if not self.from_ <= new_val <= self.to: return
+        self.value = new_val
+
+    def set_orient(self, new_orient : str):
+        if not new_orient in ("horizontal", "vertical"): return
+        self.orient = new_orient
+        self.calc_step_val()
+        self.calc_btn_radius()
+    
+    def calc_step_val(self):
+        self.step_value = (self.get_absolute_width() if self.orient == "horizontal" else self.get_absolute_height()) / abs(self.to - self.from_)
+
+    def calc_btn_radius(self):
+        if self.orient == "horizontal":
+            self.btn_radius = self.get_absolute_height()
+        else:
+            self.btn_radius = self.get_absolute_width()
 
     def draw(self, display : pg.Surface):
-        pass
+        pg.draw.rect(display, self.clr_settings["bg"], self.rect, border_radius = self.bd_radius) 
+
+        temp = self.rect.copy()
+        filled_len = self.value * self.step_value
+        if self.orient == "horizontal":
+            temp.width = filled_len
+        else:
+            temp.height = filled_len
+
+        pg.draw.rect(display, self.clr_settings["fill_clr"], temp, border_radius = self.bd_radius)
+
+        btn_pos = [0, 0]
+
+        if self.orient == "horizontal":
+            btn_pos[1] = self.rect.top + self.rect.height / 2
+            btn_pos[0] = self.rect.x + filled_len
+        else:
+            btn_pos[0] = self.rect.left + self.rect.width / 2
+            btn_pos[1] = self.rect.y + filled_len
+
+        self.btn_rect = pg.draw.circle(display, self.clr_settings["btn_bg"] if not (self.hovering or self.selected) else self.clr_settings["btn_hvr_clr"], btn_pos, self.btn_radius)
+
+    def calc_new_rect(self):
+        super().calc_new_rect()
+        self.calc_step_val()
+        self.calc_btn_radius()

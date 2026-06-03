@@ -5,13 +5,12 @@
 
 import pygame as pg
 from json import load
-from utils.widget import *
-from utils.frame import *
 from utils.border_frame import BorderFrame
 from utils.console import Console
 from utils.button import Button
 from utils.label import Label
 from utils.input_box import InputBox
+from utils.slider import Slider
 
 class App:
     def __init__(self):
@@ -35,7 +34,10 @@ class App:
         self.btn.set_command(self.change_text)
         self.independent_widgets.append(Label(0.7, 0.5, 0.3, 0.23, self.settings["MAIN_FONT"], text = "Label2", text_size = 30))
         self.in_box = InputBox(0.1, 0.7, 0.5, 0.02, self.settings["MAIN_FONT"], text_size = 15)
+        self.slider = Slider(0.5, 0.5, 0.3, 0.01)
+        self.slider.set_value(50)
         self.independent_widgets.append(self.console)
+        self.independent_widgets.append(self.slider)
         self.temp.add_child(self.btn)
         self.temp.add_child(self.label)
         self.temp.add_child(self.in_box)
@@ -68,8 +70,8 @@ class App:
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False                    
                 if event.type == pg.KEYDOWN and event.key == pg.K_k:
-                    self.label.set_text("Hello there matey!")
-                
+                    self.label.set_text("Hello there matey! Come aboard !")
+                    self.slider.set_orient("horizontal")
                 self.temp.update(event)
 
             self.screen.fill("black")

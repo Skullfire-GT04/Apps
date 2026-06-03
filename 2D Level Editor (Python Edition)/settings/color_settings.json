@@ -19,7 +19,7 @@
         "bd_clr" : "#242424"
     },
     "slider" : {
-        "bg" : "#3F617D",
+        "bg" : "#293f52",
         "btn_bg" : "#FBFCFF",
         "btn_hvr_clr" : "#D8D5D8",
         "fill_clr" : "#308DAF"
@@ -27,7 +27,8 @@
     "check_button" : {
         "unchecked_bg" : "",
         "checked_bg" : "",
-        "fg" : ""
+        "fg" : "",
+        "bd_clr" : ""
     },
     "input" : {
         "bg" : "#32324B",

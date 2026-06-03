@@ -38,6 +38,11 @@ class Widget:
     def set_id(self, id_ : int):
         self.id = id_
 
+    # sets the parent of current widget to given Frame
+    def set_parent(self, parent):
+        self.parent = parent
+        self.calc_new_rect()
+
     def get_absolute_width(self):
         if not self.parent:
             return self.width * pg.display.get_window_size()[0]

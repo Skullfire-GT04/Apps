@@ -31,10 +31,8 @@ class Label(Widget):
         self.calc_text_pos()
 
     def calc_display_text(self):
-        index = 1
-        while self.font.size(self.text[:index])[0] <= self.rect.width + 2 * self.padding and index < len(self.text):
-            index += 1
-        self.actual_display_text = self.text[:index]
+        max_chars = int(self.get_absolute_width() // self.font.size("a")[0])
+        self.actual_display_text = self.text[:max_chars]
 
     def calc_text_pos(self):
         text_width, text_height = self.font.size(self.actual_display_text)

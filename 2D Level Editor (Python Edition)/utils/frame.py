@@ -65,8 +65,7 @@ class Frame(Widget):
     def add_child(self, child : Widget):
         if not isinstance(self.child_event_map.get(child.type, None), int): return
         self.children[self.id_count] = child
-        child.parent = self
-        child.calc_new_rect()
+        child.set_parent(self)
         self.child_grouping[self.child_event_map[child.type]][self.id_count] = child
         child.id = self.id_count
         self.id_count += 1
