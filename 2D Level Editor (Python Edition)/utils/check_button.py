@@ -17,19 +17,20 @@ class CheckButton(Widget):
         self.load_color_settings("check_button")
         self.justification = text_justify
         self.btn_rect = pg.Rect()
-        self.btn_rect.width = self.font.size("a")[0]
-        self.btn_rect.height = self.btn_rect.width
         self.calc_new_rect()
+        self.btn_rect.width = self.rect.width
+        self.btn_rect.height = self.rect.height
         self.calc_btn_pos()
 
     def set_text_justification(self, new_justification : str):
         if not new_justification in ("left", "right"): return
         self.justification = new_justification
+        self.calc_text_pos()
 
     def draw(self, display : pg.Surface):
-        pg.draw.circle(display, self.clr_settings["bd_clr"], )
+        pass
 
-    def calc_btn_pos(self):
+    def calc_text_pos(self):
         pass
 
     def update(self, event):
