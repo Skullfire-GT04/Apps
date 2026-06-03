@@ -10,6 +10,7 @@ from utils.console import Console
 from utils.button import Button
 from utils.label import Label
 from utils.input_box import InputBox
+from utils.check_button import CheckButton
 from utils.slider import Slider
 
 class App:
@@ -35,12 +36,14 @@ class App:
         self.independent_widgets.append(Label(0.7, 0.5, 0.3, 0.23, self.settings["MAIN_FONT"], text = "Label2", text_size = 30))
         self.in_box = InputBox(0.1, 0.7, 0.5, 0.02, self.settings["MAIN_FONT"], text_size = 15)
         self.slider = Slider(0.5, 0.75, 0.03, 0.2)
+        self.check_button = CheckButton(0.04, 0.9, 0.03, self.settings["MAIN_FONT"])
         self.slider.set_value(50)
         self.independent_widgets.append(self.console)
         self.temp.add_child(self.btn)
         self.temp.add_child(self.label)
         self.temp.add_child(self.in_box)
         self.temp.add_child(self.slider)
+        self.temp.add_child(self.check_button)
         self.counter = 0
 
     def load_main_settings(self):
@@ -71,7 +74,6 @@ class App:
                     self.running = False                    
                 if event.type == pg.KEYDOWN and event.key == pg.K_k:
                     self.label.set_text("Hello there matey! Come aboard !")
-                    self.slider.set_orient("horizontal")
                 self.temp.update(event)
 
             self.screen.fill("black")
