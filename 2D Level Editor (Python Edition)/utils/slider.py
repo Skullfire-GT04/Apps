@@ -1,6 +1,12 @@
 import pygame as pg
 from utils.widget import Widget
 
+"""
+A basic slider widget with two orientations,
+the bottom value for vertical orientation is at the top
+and for horizontal it is at left
+"""
+
 
 class Slider(Widget):
 
@@ -16,7 +22,7 @@ class Slider(Widget):
         self.hovering = False
         self.selected = False
         self.calc_new_rect()
-        self.btn_rect = None
+        self.btn_rect = pg.Rect()
 
     # sets a new value 
     def set_value(self, new_val : int):
@@ -65,3 +71,37 @@ class Slider(Widget):
         super().calc_new_rect()
         self.calc_step_val()
         self.calc_btn_radius()
+
+    def update(self, event : pg.event):
+        super().update(event)
+
+        if event.type == pg.MOUSEBUTTONUP:
+            self.selected = False
+
+        if hasattr(event, "pos"):
+            x = self.btn_rect.x
+            y = self.btn_rect.y
+            if not (x <= event.pos[0] <= x + self.btn_rect.width and y <= event.pos[1] <= y + self.btn_rect.height):
+                if not self.selected: 
+                    self.hovering = False
+                    return
+
+        if event.type == pg.MOUSEMOTION: 
+            self.hovering = True
+        
+        if event.type == pg.MOUSEBUTTONDOWN:
+            self.selected = True
+
+        if self.selected:
+            if self.orient == "horizontal":
+                if event.pos[0] < self.rect.x: self.value = self.from_
+                elif event.pos[0] > self.rect.x + self.rect.width: self.value = self.to
+                else:
+                    cord_x = event.pos[0] - self.rect.x
+                    self.value = cord_x // self.step_value
+            else:
+                if event.pos[1] < self.rect.y: self.value = self.from_
+                elif event.pos[1] > self.rect.y + self.rect.height: self.value = self.to
+                else:
+                    cord_y = event.pos[1] - self.rect.y
+                    self.value = cord_y // self.step_value

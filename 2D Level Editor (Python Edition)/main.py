@@ -1,5 +1,5 @@
 # This is the main file to run to start the app, you can check inside
-# the src/settings folder to tinker with the settings of the app to your liking
+# the settings folder to tinker with the settings of the app to your liking
 
 # Contributor - V Cube (github username) (https://github.com/Skullfire-GT04)
 
@@ -34,13 +34,13 @@ class App:
         self.btn.set_command(self.change_text)
         self.independent_widgets.append(Label(0.7, 0.5, 0.3, 0.23, self.settings["MAIN_FONT"], text = "Label2", text_size = 30))
         self.in_box = InputBox(0.1, 0.7, 0.5, 0.02, self.settings["MAIN_FONT"], text_size = 15)
-        self.slider = Slider(0.5, 0.5, 0.3, 0.01)
+        self.slider = Slider(0.5, 0.75, 0.03, 0.2)
         self.slider.set_value(50)
         self.independent_widgets.append(self.console)
-        self.independent_widgets.append(self.slider)
         self.temp.add_child(self.btn)
         self.temp.add_child(self.label)
         self.temp.add_child(self.in_box)
+        self.temp.add_child(self.slider)
         self.counter = 0
 
     def load_main_settings(self):

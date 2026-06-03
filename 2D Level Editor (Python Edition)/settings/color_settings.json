@@ -25,10 +25,10 @@
         "fill_clr" : "#308DAF"
     },
     "check_button" : {
-        "unchecked_bg" : "",
-        "checked_bg" : "",
-        "fg" : "",
-        "bd_clr" : ""
+        "unchecked_bg" : "#52BFAF",
+        "checked_bg" : "#E45C4D",
+        "fg" : "#F8F8EE",
+        "bd_clr" : "#495054"
     },
     "input" : {
         "bg" : "#32324B",
