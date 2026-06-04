@@ -3,8 +3,20 @@
 
 # Contributor - V Cube (github username) (https://github.com/Skullfire-GT04)
 
+"""
+TODO: 
+
+(i) Implement Frame Docker Widget : Semi-Done
+(ii) Make file manager frame
+(iii) Make animation manager frame
+(iv) Make animation customization frame
+(v) Make canvas frame
+
+"""
+
 import pygame as pg
 from json import load
+from src.frame_docker import DockerFrame
 
 class App:
     def __init__(self):
@@ -19,8 +31,10 @@ class App:
         self.screen = pg.display.set_mode(self.settings["SCREEN_SIZE"])
         pg.display.set_caption(self.settings["APP_NAME"])
         self.clock = pg.time.Clock()
-        self.frames = []
         self.independent_widgets = []
+        self.docker = DockerFrame(self)
+        self.docker.add_frame("File Panel")
+        self.docker.add_frame("Animations")
 
     def load_main_settings(self):
         try:
@@ -29,10 +43,6 @@ class App:
         except FileNotFoundError as e:
             print("Main settings not found exiting app....")
             self.running = False
-
-    # updated the current frame
-    def update(self):
-        pass
 
     # the main loop for the app
     def run(self):
@@ -44,9 +54,11 @@ class App:
                         widget.calc_new_rect()
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False                    
-                
+                self.docker.update(event)
 
             self.screen.fill("black")
+
+            self.docker.draw(self.screen)
 
             pg.display.update()
             self.clock.tick(self.settings["FPS"])
