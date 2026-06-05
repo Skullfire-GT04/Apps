@@ -30,6 +30,7 @@ class DockerFrame:
 
     def change_frame(self, index : int):
         self.curr_frame = index
+        self.frames[self.curr_frame].update(pg.event.Event(pg.VIDEORESIZE))
 
     def delete_frame(self, name : str):
         if name not in self.names: return
