@@ -25,54 +25,80 @@ class Animation:
             "scale_up" : self.scale,
             "scale_down" : self.scale
         }
-        self.animation_stack = []
+        self.count = 0
+        self.animation_stack = {}
 
     def translate_x(self, index : int) -> bool:
-        widget = self.animation_stack[index][0]
-        if self.check_proximity(widget.x, self.animation_stack[index][2], 0.01):
-            widget.x = self.animation_stack[index][2]
-            return True
-        start_time = pg.time.get_ticks()
-        widget.x += self.animation_stack[index][4] * (start_time - self.animation_stack[index][5])
-        self.animation_stack[index][5] = start_time
+        reached = False
+        widget = self.animation_stack[index]["widget"]
+        
+        if self.animation_stack[index]["delta"] < 0:
+            if widget.x <= self.animation_stack[index]["x"]:
+                widget.x = self.animation_stack[index]["x"]
+                reached = True
+        
+        if self.animation_stack[index]["delta"] > 0:
+            if widget.x >= self.animation_stack[index]["x"]:
+                widget.x = self.animation_stack[index]["x"]
+                reached = True
+
+        if not reached:
+            start_time = pg.time.get_ticks()
+            widget.x += self.animation_stack[index]["delta"] * (start_time - self.animation_stack[index]["last_time"])
+            self.animation_stack[index]["last_time"] = start_time
+
         widget.calc_new_rect()
-        return False
+        return reached
 
     def translate_y(self, index : int) -> bool:
-        widget = self.animation_stack[index][0]
-        if self.check_proximity(widget.y, self.animation_stack[index][3], 0.01):
-            widget.y = self.animation_stack[index][3]
-            return True
-        start_time = pg.time.get_ticks()
-        widget.y += self.animation_stack[index][4] * (start_time - self.animation_stack[index][5])
-        self.animation_stack[index][5] = start_time
+        reached = False
+        widget = self.animation_stack[index]["widget"]
+        
+        if self.animation_stack[index]["delta"] < 0:
+            if widget.y <= self.animation_stack[index]["y"]:
+                widget.y = self.animation_stack[index]["y"]
+                reached = True
+        
+        if self.animation_stack[index]["delta"] > 0:
+            if widget.y >= self.animation_stack[index]["y"]:
+                widget.y = self.animation_stack[index]["y"]
+                reached = True
+
+        if not reached:
+            start_time = pg.time.get_ticks()
+            widget.y += self.animation_stack[index]["delta"] * (start_time - self.animation_stack[index]["last_time"])
+            self.animation_stack[index]["last_time"] = start_time
+
         widget.calc_new_rect()
-        return False
+        return reached
 
     def scale(self, index : int) -> bool:
         reached_width = reached_height = False
         start_time = pg.time.get_ticks()
-        widget = self.animation_stack[index][0]
+        widget = self.animation_stack[index]["widget"]
 
-        if self.check_proximity(widget.width, self.animation_stack[index][4], 0.01):
-            widget.width = self.animation_stack[index][4]
-            reached_width = True
+        if self.animation_stack[index]["scale"] > 1:
+            if widget.width >= self.animation_stack[index]["end_w"]: reached_width = True
+            if widget.height >= self.animation_stack[index]["end_h"]: reached_height = True
+        
+        if self.animation_stack[index]["scale"] < 1:
+            if widget.width <= self.animation_stack[index]["end_w"]: reached_width = True
+            if widget.height <= self.animation_stack[index]["end_h"]: reached_height = True
+        
+        if not reached_width:
+            widget.width += self.animation_stack[index]["delta_w"] * (start_time - self.animation_stack[index]["last_time"])
         else:
-            widget.width += self.animation_stack[index][2] * (start_time - self.animation_stack[index][6])
-
-        if self.check_proximity(widget.height, self.animation_stack[index][5], 0.01):
-            widget.height = self.animation_stack[index][5]
-            reached_height = True
+            widget.width = self.animation_stack[index]["end_w"]
+        
+        if not reached_height:
+            widget.height += self.animation_stack[index]["delta_h"] * (start_time - self.animation_stack[index]["last_time"])
         else:
-            widget.height += self.animation_stack[index][3] * (start_time - self.animation_stack[index][6])
+            widget.height = self.animation_stack[index]["end_h"]
 
-        self.animation_stack[index][6] = start_time
+        self.animation_stack[index]["last_time"] = start_time
         widget.calc_new_rect()
 
         return reached_width and reached_height
-
-    def check_proximity(self, value1, value2, error) -> bool:
-        return abs(value1 - value2) <= error
     
     # adds a new animation to the animation stack
     def add_widget_animation(self, widget : Widget, anim_type : str, time : int, x : float, y : float, scale : float):
@@ -99,22 +125,36 @@ class Animation:
         delta_h = (end_h - widget.height) / time
 
         # adding the animation to the stack
-        if anim_type == temp[0] or anim_type == temp[1]: self.animation_stack.append([widget, anim_type, x, y, delta, pg.time.get_ticks()])
-        else: self.animation_stack.append([widget, anim_type, delta_w, delta_h, end_w, end_h, pg.time.get_ticks()])
-
+        if anim_type == temp[0] or anim_type == temp[1]: 
+            self.animation_stack[self.count] = {
+                "widget" : widget,
+                "anim_type" : anim_type,
+                "x" : x,
+                "y" : y,
+                "delta" : delta,
+                "last_time" : pg.time.get_ticks()
+            }
+        else: 
+            self.animation_stack[self.count] = {
+                "widget" : widget,
+                "anim_type" : anim_type,
+                "delta_w" : delta_w,
+                "delta_h" : delta_h,
+                "end_w" : end_w,
+                "end_h" : end_h,
+                "scale" : scale,
+                "last_time" : pg.time.get_ticks()
+            }
+        self.count += 1
 
     # this function should be called in the main loop to properly animate the widgets
     def animate(self):
         del_items = []
-        for i in range(len(self.animation_stack)):
-            if self.anim_map[self.animation_stack[i][1]](i): del_items.append(i)
+        for key in self.animation_stack.keys():
+            if self.anim_map[self.animation_stack[key]["anim_type"]](key):
+                del_items.append(key)
 
-        count = 0
-        index = 0
-        while index < len(self.animation_stack):
-            if index in del_items:
-                self.animation_stack.pop(index - count)
-                count += 1
-            else: index += 1
-            
+        if not del_items: return
+
+        for item in del_items: del self.animation_stack[item]            
             

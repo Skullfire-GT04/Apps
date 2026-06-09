@@ -34,7 +34,7 @@ class App:
         pg.display.set_caption(self.settings["APP_NAME"])
         self.clock = pg.time.Clock()
         self.independent_widgets = []
-        self.frame = BorderFrame(0.1, 0.1, 0.3, 0.3, border_width = 3)        
+        self.frame = BorderFrame(0.35, 0.3, 0.3, 0.2, border_width = 3)        
         self.animation_manager = Animation()
 
     def load_main_settings(self):
@@ -56,8 +56,9 @@ class App:
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False
                 if event.type == pg.KEYDOWN and event.key == pg.K_k:
-                    self.animation_manager.add_widget_animation(self.frame, "translate_x", 500, 0.5, 0.3, 1)      
-                    self.animation_manager.add_widget_animation(self.frame, "scale_down", 500, 0.5, 0.3, 0.5)
+                    #self.animation_manager.add_widget_animation(self.frame, "translate_y", 200, 0.5, 0.4, 1)      
+                    #self.animation_manager.add_widget_animation(self.frame, "translate_x", 200, 0.27, 0.7, 1)
+                    self.animation_manager.add_widget_animation(self.frame, "scale_up", 200, 0.5, 0.3, 1.5)
 
             self.screen.fill("black")
             self.frame.draw(self.screen)
