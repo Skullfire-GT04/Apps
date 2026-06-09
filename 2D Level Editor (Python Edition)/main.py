@@ -16,6 +16,8 @@ TODO:
 
 import pygame as pg
 from json import load
+from utils.border_frame import BorderFrame
+from utils.animations import Animation
 from src.frame_docker import DockerFrame
 
 class App:
@@ -32,9 +34,8 @@ class App:
         pg.display.set_caption(self.settings["APP_NAME"])
         self.clock = pg.time.Clock()
         self.independent_widgets = []
-        self.docker = DockerFrame(self)
-        self.docker.add_frame("File Panel")
-        self.docker.add_frame("Animations")
+        self.frame = BorderFrame(0.1, 0.1, 0.3, 0.3, border_width = 3)        
+        self.animation_manager = Animation()
 
     def load_main_settings(self):
         try:
@@ -53,12 +54,14 @@ class App:
                     for widget in self.independent_widgets:
                         widget.calc_new_rect()
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
-                    self.running = False                    
-                self.docker.update(event)
+                    self.running = False
+                if event.type == pg.KEYDOWN and event.key == pg.K_k:
+                    self.animation_manager.add_widget_animation(self.frame, "translate_y", 500, 0.5, 0.3, 1)      
+        
 
             self.screen.fill("black")
-
-            self.docker.draw(self.screen)
+            self.frame.draw(self.screen)
+            self.animation_manager.animate()
 
             pg.display.update()
             self.clock.tick(self.settings["FPS"])

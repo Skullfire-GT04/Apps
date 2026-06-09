@@ -1,5 +1,5 @@
 {
-    "FPS" : 120,
+    "FPS" : 200,
     "SCREEN_SIZE" : [1200, 800],
     "MAIN_FONT" : "res/main_font.ttf",
     "APP_NAME" : "2D Map Editor"
