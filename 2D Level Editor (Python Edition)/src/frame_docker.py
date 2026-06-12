@@ -1,6 +1,7 @@
 import pygame as pg
-from utils.border_frame import BorderFrame
 from utils.button import Button
+from .file_manager import FileManager
+from .sprite_manager import SpriteManager
 
 
 class DockerFrame:
@@ -14,11 +15,25 @@ class DockerFrame:
         self.label_height = 0.04
         self.curr_x = 0
         self.app = app
+        self.frame_type_map = {
+            "file_manager" : FileManager,
+            "sprite_manager" : SpriteManager
+        }
 
-    def add_frame(self, name : str):
+    def add_frame(self, name : str, type : str, *args, **kwargs):
         if name in self.names: return
-
-        temp = BorderFrame(0.01, 0, 0.98, 1) # completely covering the screen
+        if not self.frame_type_map.get(type, None): return
+        
+        temp = None
+        if not args and not kwargs:
+            temp = self.frame_type_map[type]()
+        elif args and not kwargs:
+            temp = self.frame_type_map[type](args)
+        elif kwargs and not args:
+            temp = self.frame_type_map[type](kwargs)
+        else:
+            temp = self.frame_type_map[type](args, kwargs)
+        
         self.frames.append(temp)
         self.names.append(name)
         index = len(self.frames) - 1
@@ -28,7 +43,9 @@ class DockerFrame:
         self.curr_x += self.max_label_width
         self.curr_frame = index
 
+    # changes the current selected frame to the given index
     def change_frame(self, index : int):
+        if index < 0 or index >= len(self.frames): return
         self.curr_frame = index
         self.frames[self.curr_frame].update(pg.event.Event(pg.VIDEORESIZE))
 
@@ -45,6 +62,7 @@ class DockerFrame:
         self.curr_frame += 1
         if self.curr_frame > len(self.frames): self.curr_frame = 0 if len(self.frames) else -1
 
+    # updates the current selected frame and all the labels
     def update(self, event : pg.event):
         if self.curr_frame < 0: return
 

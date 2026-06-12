@@ -16,9 +16,9 @@ TODO:
 
 import pygame as pg
 from json import load
-from utils.border_frame import BorderFrame
-from utils.animations import Animation
-from src.frame_docker import DockerFrame
+from utils import Animation
+from src import DockerFrame, FileManager
+
 
 class App:
     def __init__(self):
@@ -33,9 +33,13 @@ class App:
         self.screen = pg.display.set_mode(self.settings["SCREEN_SIZE"])
         pg.display.set_caption(self.settings["APP_NAME"])
         self.clock = pg.time.Clock()
+        self.anim_manager = Animation()
+        
+        # adding default widgets and frames to the app
+        self.docker = DockerFrame(self)
+        self.docker.add_frame("Files", "file_manager", app = self)
+        self.docker.add_frame("Sprites", "sprite_manager")
         self.independent_widgets = []
-        self.frame = BorderFrame(0.35, 0.3, 0.3, 0.2, border_width = 3)        
-        self.animation_manager = Animation()
 
     def load_main_settings(self):
         try:
@@ -55,14 +59,13 @@ class App:
                         widget.calc_new_rect()
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False
-                if event.type == pg.KEYDOWN and event.key == pg.K_k:
-                    #self.animation_manager.add_widget_animation(self.frame, "translate_y", 200, 0.5, 0.4, 1)      
-                    #self.animation_manager.add_widget_animation(self.frame, "translate_x", 200, 0.27, 0.7, 1)
-                    self.animation_manager.add_widget_animation(self.frame, "scale_up", 200, 0.5, 0.3, 1.5)
+
+                # updating the current frame
+                self.docker.update(event)
 
             self.screen.fill("black")
-            self.frame.draw(self.screen)
-            self.animation_manager.animate()
+
+            self.docker.draw(self.screen)
 
             pg.display.update()
             self.clock.tick(self.settings["FPS"])
