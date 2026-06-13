@@ -7,3 +7,4 @@ from .border_frame import BorderFrame
 from .slider import Slider
 from .input_box import InputBox
 from .check_button import CheckButton
+from .scrollable_frame import ScrollableFrame

@@ -24,10 +24,6 @@ class Frame(Widget):
         self.child_event_map = {widget : i for i, widget in zip(range(len(WIDGET_TYPES_ALL)), WIDGET_TYPES_ALL)}
         self.child_grouping = [{} for _ in range(len(self.child_event_map))]
 
-    # sets the background color of the frame to given color
-    def set_bg(self, color : str):
-        self.bg = color
-
     # draws the frame on a given surface
     def draw(self, display : pg.Surface):
         pg.draw.rect(display, self.clr_settings["bg"], self.rect, border_radius = self.bd_radius)
@@ -72,7 +68,7 @@ class Frame(Widget):
 
     def change_children(self):
         for child in self.children:
-            child.parent_changes()
+            self.children[child].parent_changes()
     
     def change_x(self, new_x):
         super().change_x(new_x)
@@ -89,3 +85,8 @@ class Frame(Widget):
     def change_width(self, new_width):
         super().change_width(new_width)
         self.change_children()
+    
+    def parent_changes(self):
+        super().parent_changes()
+        for child in self.children:
+            self.children[child].parent_changes()

@@ -7,10 +7,8 @@ from .sprite_manager import SpriteManager
 class DockerFrame:
 
     def __init__(self, app):
-        self.frames = []
-        self.labels = []
-        self.names = []
-        self.curr_frame = -1
+        self.frames = {}
+        self.curr_frame = None
         self.max_label_width = 0.1
         self.label_height = 0.04
         self.curr_x = 0
@@ -21,7 +19,7 @@ class DockerFrame:
         }
 
     def add_frame(self, name : str, type : str, *args, **kwargs):
-        if name in self.names: return
+        if self.frames.get(name, None): return
         if not self.frame_type_map.get(type, None): return
         
         temp = None
@@ -34,47 +32,50 @@ class DockerFrame:
         else:
             temp = self.frame_type_map[type](args, kwargs)
         
-        self.frames.append(temp)
-        self.names.append(name)
-        index = len(self.frames) - 1
-        temp = Button(self.curr_x, 1 - self.label_height, self.max_label_width, self.label_height, self.app.settings["MAIN_FONT"], text = name)
-        temp.set_command(lambda: self.change_frame(index))
-        self.labels.append(temp)
+        index = len(self.frames)
+        btn = Button(self.curr_x, 1 - self.label_height, self.max_label_width, self.label_height, self.app.settings["MAIN_FONT"], text = name)
+        btn.set_command(lambda: self.change_frame(name))
+
+        self.frames[name] = {
+            "frame" : temp,
+            "btn" : btn,
+            "index" : index
+        }
+
         self.curr_x += self.max_label_width
-        self.curr_frame = index
+        self.curr_frame = name
 
     # changes the current selected frame to the given index
-    def change_frame(self, index : int):
-        if index < 0 or index >= len(self.frames): return
-        self.curr_frame = index
-        self.frames[self.curr_frame].update(pg.event.Event(pg.VIDEORESIZE))
+    def change_frame(self, name : str):
+        self.curr_frame = name
+        self.frames[self.curr_frame]["frame"].update(pg.event.Event(pg.VIDEORESIZE))
 
     def delete_frame(self, name : str):
-        if name not in self.names: return
-        index = self.names.index(name)
+        if not self.frames.get(name, None): return
+        
+        index = self.frames[name]["index"]
+        names = list(self.frames.keys())
 
-        for i in range(index + 1, len(self.names)):
-            self.labels[i].change_x(self.labels[i].x - self.max_label_width)
+        for i in range(index + 1, len(self.frames)):
+            self.frames[names[i]]["btn"].change_x(self.frames[names[i]]["btn"].x - self.max_label_width)
+            self.frames[names[i]]["index"] -= 1
 
-        self.names.pop(index)
-        self.labels.pop(index)
-        self.frames.pop(index)
-        self.curr_frame += 1
-        if self.curr_frame > len(self.frames): self.curr_frame = 0 if len(self.frames) else -1
+        del self.frames[name]
 
     # updates the current selected frame and all the labels
     def update(self, event : pg.event):
-        if self.curr_frame < 0: return
+        if not self.curr_frame: return
 
-        self.frames[self.curr_frame].update(event)
-        for label in self.labels:
-            label.update(event)
+        self.frames[self.curr_frame]["frame"].update(event)
+
+        for name in self.frames.keys():
+            self.frames[name]["btn"].update(event)
     
     def draw(self, display : pg.Surface):
-        if self.curr_frame < 0: return
+        if not self.curr_frame: return
 
-        self.frames[self.curr_frame].draw(display)
+        self.frames[self.curr_frame]["frame"].draw(display)
 
-        for i in range(len(self.frames)):
-            self.labels[i].draw(display)
+        for name in self.frames.keys():
+            self.frames[name]["btn"].draw(display)
     

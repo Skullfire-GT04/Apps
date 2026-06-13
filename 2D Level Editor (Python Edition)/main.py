@@ -37,7 +37,7 @@ class App:
         
         # adding default widgets and frames to the app
         self.docker = DockerFrame(self)
-        self.docker.add_frame("Files", "file_manager", app = self)
+        self.docker.add_frame("Files", "file_manager", app = self, docker = self.docker)
         self.docker.add_frame("Sprites", "sprite_manager")
         self.independent_widgets = []
 
