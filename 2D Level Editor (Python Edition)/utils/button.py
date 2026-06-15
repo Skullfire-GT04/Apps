@@ -63,7 +63,7 @@ class Button(Label):
             self.hovering = True
 
         # checking if the mouse has clicked the button
-        if event.type == pg.MOUSEBUTTONDOWN:
+        if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
             self.command()
         
     def set_command(self, new_command):

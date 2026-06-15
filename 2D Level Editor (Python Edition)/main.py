@@ -16,7 +16,7 @@ TODO:
 
 import pygame as pg
 from json import load
-from utils import Animation
+from utils import Animation, InputBox
 from src import DockerFrame, FileManager
 
 
