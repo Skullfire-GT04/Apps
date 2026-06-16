@@ -13,8 +13,7 @@ class ScrollableFrame(Frame):
         super().__init__(x, y, width, height, bd_radius = bd_radius)
         self.scroll_speed = 0.05
         self.type = "scrollable_frame"
-        self.delta = 0
-        
+        self.delta = 0        
     
     def draw(self, display):
         pg.draw.rect(display, self.clr_settings["bg"], self.rect, border_radius = self.bd_radius)

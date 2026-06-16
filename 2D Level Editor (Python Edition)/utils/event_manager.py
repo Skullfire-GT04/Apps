@@ -7,11 +7,11 @@ WIDGET_TYPES_ALL = ("frame", "button", "label", "slider", "console", "input", "c
 
 # event mapping for widget types
 EVENT_MAP = {
-    pg.MOUSEMOTION : ("button", "label", "slider", "input"),
-    pg.MOUSEBUTTONDOWN : ("button", "input", "slider", "check_button"),
-    pg.MOUSEBUTTONUP : ("button", "input", "slider"),
-    pg.KEYDOWN : ("button", "input"),
-    pg.KEYUP : ("button", "input"),
+    pg.MOUSEMOTION : ("button", "label", "slider", "input", "frame"),
+    pg.MOUSEBUTTONDOWN : ("button", "input", "slider", "check_button", "frame"),
+    pg.MOUSEBUTTONUP : ("button", "input", "slider", "frame"),
+    pg.KEYDOWN : ("button", "input", "frame"),
+    pg.KEYUP : ("button", "input", "frame"),
     pg.MOUSEWHEEL : ("scrollable_frame", "slider")
 }
 

@@ -8,3 +8,4 @@ from .slider import Slider
 from .input_box import InputBox
 from .check_button import CheckButton
 from .scrollable_frame import ScrollableFrame
+from .PixelWidgets.pixel_button import PixelButton

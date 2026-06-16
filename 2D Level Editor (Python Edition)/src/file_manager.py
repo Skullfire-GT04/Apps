@@ -43,17 +43,17 @@ class FileManager(ScrollableFrame):
     # adds a file card UI
     def add_file_card(self):
         frame = BorderFrame(self.file_card_x, self.file_card_y, self.file_card_width, self.file_card_height, border_width = 3, bd_radius =  0)
-        label1 = Label(0.09, 0.04, 0.3, 0.1, self.app.settings["MAIN_FONT"], text = "Name", text_size = 15)
-        input1 = InputBox(0.1, 0.3, 0.7, 0.1, self.app.settings["MAIN_FONT"], placeholder = "File Name", text_size = 15)
-        label2 = Label(0.03, 0.44, 0.3, 0.15, self.app.settings["MAIN_FONT"], text = "Save Location")
-        input2 = InputBox(0.03, 0.62, 0.8, 0.2, self.app.settings["MAIN_FONT"], placeholder = "File Path")
+        label1 = Label(0.09, 0.14, 0.3, 0.1, self.app.settings["MAIN_FONT"], text = "Name", text_size = 15)
+        input1 = InputBox(0.09, 0.3, 0.7, 0.1, self.app.settings["MAIN_FONT"], placeholder = "File Name", text_size = 15, padding = 10, border_width = 2)
+        label2 = Label(0.09, 0.5, 0.3, 0.1, self.app.settings["MAIN_FONT"], text = "Save Location", text_size = 15)
+        input2 = InputBox(0.09, 0.66, 0.7, 0.1, self.app.settings["MAIN_FONT"], placeholder = "File Path", padding = 10, border_width = 2)
 
         delete_btn = Button(0.8, 0.04, 0.15, 0.15, self.app.settings["MAIN_FONT"])
 
         frame.add_child(label1)
         frame.add_child(input1)
-        # frame.add_child(label2)
-        # frame.add_child(input2)
+        frame.add_child(label2)
+        frame.add_child(input2)
         frame.add_child(delete_btn)
 
         self.add_child(frame)
