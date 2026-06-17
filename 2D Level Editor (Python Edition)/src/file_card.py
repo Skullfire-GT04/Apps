@@ -15,8 +15,16 @@ class FileCard(BorderFrame):
         self.path_input = InputBox(0.09, 0.66, 0.7, 0.1, font, placeholder = "File Path", padding = 10, border_width = 2)
 
         # buttons
-        self.delete_btn = Button(0.93, 0.03, 0.05, 0.05, font)
-        self.edit_btn = Button(0.1, 0.85, 0.15, 0.1, font, text = "Edit", text_size = 15)
+        self.delete_btn = PixelButton(0.93, 0, 0.07, 0.07, "res/CloseButton1/non_hovering.png", border_radius = 5)
+        self.edit_btn = PixelButton(0.1, 0.82, 0.15, 0.15, "res/EditButton1/non_hovering.png")
+        self.save_btn = Button(0.3, 0.83, 0.3, 0.14, font, text_size = 15, text = "Save Changes", padding = 5)
+        self.save_file = Button(0.66, 0.83, 0.3, 0.14, font, text = "Save File", text_size = 15, padding = 5)
+        
+
+        # custom coloring
+        self.delete_btn.clr_settings["bg"] = "#b01925"
+        self.delete_btn.clr_settings["btn_hvr_clr"] = "#660f16"
+
 
         self.name = self.name_input.text
         # self.save_locations = save_location
@@ -27,3 +35,13 @@ class FileCard(BorderFrame):
         self.add_child(self.path_input)
         self.add_child(self.delete_btn)
         self.add_child(self.edit_btn)
+        self.add_child(self.save_btn)
+        self.add_child(self.save_file)
+
+        # flags
+        self.editing = False
+
+        self.edit_btn.set_command(self.toggle_edit_mode)
+
+    def toggle_edit_mode(self):
+        self.editing = not self.editing

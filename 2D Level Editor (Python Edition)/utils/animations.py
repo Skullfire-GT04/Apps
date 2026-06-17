@@ -48,6 +48,8 @@ class Animation:
             self.animation_stack[index]["last_time"] = start_time
 
         widget.calc_new_rect()
+        if hasattr(widget, "children"): widget.change_children()
+
         return reached
 
     def translate_y(self, index : int) -> bool:
@@ -70,6 +72,8 @@ class Animation:
             self.animation_stack[index]["last_time"] = start_time
 
         widget.calc_new_rect()
+        if hasattr(widget, "children"): widget.change_children()
+        
         return reached
 
     def scale(self, index : int) -> bool:
@@ -97,6 +101,7 @@ class Animation:
 
         self.animation_stack[index]["last_time"] = start_time
         widget.calc_new_rect()
+        if hasattr(widget, "children"): widget.change_children()
 
         return reached_width and reached_height
     

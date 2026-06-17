@@ -46,7 +46,6 @@ class FileManager(ScrollableFrame):
     # adds a file card to the UI
     def add_file_card(self):
         file_card = FileCard(self.file_card_x, self.file_card_y + self.delta, self.file_card_width, self.file_card_height, self.app.settings["MAIN_FONT"])
-        file_card.delete_btn.set_command(lambda: self.remove_file_card(file_card.name))
         self.add_child(file_card)
         self.change_coords()
 

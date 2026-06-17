@@ -17,7 +17,7 @@ TODO:
 import pygame as pg
 from json import load
 from utils import Animation, InputBox
-from src import DockerFrame, FileManager
+from src import DockerFrame, FileManager, PopUpWindow
 
 
 class App:
@@ -40,6 +40,7 @@ class App:
         self.docker.add_frame("Files", "file_manager", app = self, docker = self.docker)
         self.docker.add_frame("Sprites", "sprite_manager")
         self.independent_widgets = []
+        self.pop_up_window = PopUpWindow(self.settings["MAIN_FONT"], self.anim_manager)
 
     def load_main_settings(self):
         try:
@@ -60,12 +61,24 @@ class App:
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False
 
-                # updating the current frame
-                self.docker.update(event)
+                if event.type == pg.KEYDOWN and event.key == pg.K_k: 
+                    self.pop_up_window.ask_input(["Name", "Age", "Address"])
 
+                self.pop_up_window.update(event)
+
+                # updating the current frame if no pop-up input field is active
+                if not self.pop_up_window.active:
+                    self.docker.update(event)
+
+            # clearing the screen
             self.screen.fill("black")
 
+            # animating widgets
+            self.anim_manager.animate()
+
+            # drawing frames
             self.docker.draw(self.screen)
+            self.pop_up_window.draw(self.screen)
 
             pg.display.update()
             self.clock.tick(self.settings["FPS"])

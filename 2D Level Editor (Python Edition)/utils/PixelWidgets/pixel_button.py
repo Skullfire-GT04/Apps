@@ -55,5 +55,8 @@ class PixelButton(Button):
     def change_x(self, new_x):
         self.x = new_x
         self.calc_new_rect()
+
+    def parent_changes(self):
+        self.calc_new_rect()
             
         
