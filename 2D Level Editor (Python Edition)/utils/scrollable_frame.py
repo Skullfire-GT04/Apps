@@ -1,11 +1,16 @@
 import pygame as pg
 from .frame import Frame
 
-
 """
 This module implements a scrollable frame,
 the scroll only work for the vertical axis
+
+NOTE: Any widget made from this class should take into account the delta
+      or scroll value when adding children, the reason I have not added it in the add_child
+      method explicitly is because I want to provide the user with full freedom
+
 """
+
 
 class ScrollableFrame(Frame):
 
@@ -13,22 +18,39 @@ class ScrollableFrame(Frame):
         super().__init__(x, y, width, height, bd_radius = bd_radius)
         self.scroll_speed = 0.05
         self.type = "scrollable_frame"
+        self.highest_y_val = 0
+        self.lower_scroll_margin = 0.05
         self.delta = 0        
     
-    def draw(self, display):
-        pg.draw.rect(display, self.clr_settings["bg"], self.rect, border_radius = self.bd_radius)
-
+    def scroll_children(self, value : float):
         for child in self.children.values():
-            child.change_y(child.y + self.delta)
-            child.draw(display)
-            child.change_y(child.y - self.delta)
+            child.change_y(child.y + value)
 
     def update(self, event : pg.Event):
         super().update(event)
 
         if event.type == pg.MOUSEWHEEL:
             self.delta += - self.scroll_speed if event.y < 1 else self.scroll_speed
-            if self.delta >= 0: self.delta = 0
+            
+            # adding scroll limits
+            if self.delta > 0: self.delta = 0
+            elif self.highest_y_val + self.lower_scroll_margin + self.delta <= 0: 
+                self.delta = - (self.highest_y_val + self.lower_scroll_margin)
+
+            # scrolling the children
+            if self.delta and self.delta != -(self.highest_y_val + self.lower_scroll_margin): 
+                self.scroll_children(-self.scroll_speed if event.y < 1 else self.scroll_speed)
+
+    def add_child(self, child):
+        super().add_child(child)
+        if child.y + child.height > self.highest_y_val: self.highest_y_val = child.y + child.height
+
+    def delete_child(self, child):
+        super().delete_child(child)
+        if child.y == self.highest_y_val:
+            self.highest_y_val = 0
+            for child in self.children.values():
+                if child.y + child.height > self.highest_y_val: self.highest_y_val = child.y + child.height
 
                 
 

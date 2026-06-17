@@ -1,5 +1,5 @@
-import pygame as pg
-from utils import BorderFrame, Button, InputBox, Label, ScrollableFrame
+from utils import Button, Label, ScrollableFrame, PixelButton
+from .file_card import FileCard
 
 """
 This module handles the creation, loading,
@@ -22,7 +22,7 @@ class FileManager(ScrollableFrame):
         self.margin = 0.02
 
         # add btn
-        self.btn_size = 0.07
+        self.btn_size = 0.04
 
         # coordinate variables
         self.file_card_x = self.margin
@@ -32,8 +32,11 @@ class FileManager(ScrollableFrame):
         heading = Label(0.4, 0.03, 0.2, 0.05, self.app.settings["MAIN_FONT"], text = "File Cards")
 
         # adding the button which adds a new file cards
-        self.add_btn = Button(self.file_card_x + self.file_card_width / 2, self.file_card_y + self.file_card_height / 2, self.btn_size, self.btn_size,
-                              self.app.settings["MAIN_FONT"], text = "Add/Load")
+        # self.add_btn = Button(self.file_card_x + self.file_card_width / 2, self.file_card_y + self.file_card_height / 2, self.btn_size, self.btn_size,
+        #                       self.app.settings["MAIN_FONT"], text = "Add/Load")
+
+        self.add_btn = PixelButton(self.file_card_x + self.file_card_width / 2, self.file_card_y + self.file_card_height / 2, self.btn_size, self.btn_size + 0.01,
+                                   "res/AddButton1/non_hovering.png", hover_img_path = "res/AddButton1/hovering.png")
         
         self.add_btn.set_command(self.add_file_card)
         self.add_child(self.add_btn)
@@ -42,21 +45,7 @@ class FileManager(ScrollableFrame):
 
     # adds a file card UI
     def add_file_card(self):
-        frame = BorderFrame(self.file_card_x, self.file_card_y, self.file_card_width, self.file_card_height, border_width = 3, bd_radius =  0)
-        label1 = Label(0.09, 0.14, 0.3, 0.1, self.app.settings["MAIN_FONT"], text = "Name", text_size = 15)
-        input1 = InputBox(0.09, 0.3, 0.7, 0.1, self.app.settings["MAIN_FONT"], placeholder = "File Name", text_size = 15, padding = 10, border_width = 2)
-        label2 = Label(0.09, 0.5, 0.3, 0.1, self.app.settings["MAIN_FONT"], text = "Save Location", text_size = 15)
-        input2 = InputBox(0.09, 0.66, 0.7, 0.1, self.app.settings["MAIN_FONT"], placeholder = "File Path", padding = 10, border_width = 2)
-
-        delete_btn = Button(0.8, 0.04, 0.15, 0.15, self.app.settings["MAIN_FONT"])
-
-        frame.add_child(label1)
-        frame.add_child(input1)
-        frame.add_child(label2)
-        frame.add_child(input2)
-        frame.add_child(delete_btn)
-
-        self.add_child(frame)
+        self.add_child(FileCard(self.file_card_x, self.file_card_y + self.delta, self.file_card_width, self.file_card_height, self.app.settings["MAIN_FONT"]))
         self.change_coords()
 
     # removes and unloads a file card and a file
@@ -74,7 +63,7 @@ class FileManager(ScrollableFrame):
             self.file_card_y += self.file_card_height + self.margin
 
         self.add_btn.change_x(self.file_card_x + self.file_card_width / 2)
-        self.add_btn.change_y(self.file_card_y + self.file_card_height / 2)
+        self.add_btn.change_y((self.file_card_y + self.delta) + self.file_card_height / 2)
 
     # creates a new file 
     def add_file(self, name : str):
