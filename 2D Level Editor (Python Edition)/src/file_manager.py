@@ -16,15 +16,15 @@ class FileManager(ScrollableFrame):
 
         # constants
 
-        # file cards
+        # file cards configurations
         self.file_card_width = 0.3
         self.file_card_height = 0.4
         self.margin = 0.02
 
-        # add btn
+        # add btn configurations
         self.btn_size = 0.04
 
-        # coordinate variables
+        # coordinate variables (don't touch these pls)
         self.file_card_x = self.margin
         self.file_card_y = self.margin + 0.1
 
@@ -43,9 +43,11 @@ class FileManager(ScrollableFrame):
         self.add_child(heading)
         
 
-    # adds a file card UI
+    # adds a file card to the UI
     def add_file_card(self):
-        self.add_child(FileCard(self.file_card_x, self.file_card_y + self.delta, self.file_card_width, self.file_card_height, self.app.settings["MAIN_FONT"]))
+        file_card = FileCard(self.file_card_x, self.file_card_y + self.delta, self.file_card_width, self.file_card_height, self.app.settings["MAIN_FONT"])
+        file_card.delete_btn.set_command(lambda: self.remove_file_card(file_card.name))
+        self.add_child(file_card)
         self.change_coords()
 
     # removes and unloads a file card and a file
