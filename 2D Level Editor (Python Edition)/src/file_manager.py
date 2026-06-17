@@ -13,6 +13,7 @@ class FileManager(ScrollableFrame):
         super().__init__(0, 0, 1, 1)
         self.app = kwargs["app"]
         self.docker = kwargs["docker"]
+        self.pop_up_window = kwargs["pop_up_window"]
 
         # constants
 
@@ -32,9 +33,6 @@ class FileManager(ScrollableFrame):
         heading = Label(0.4, 0.03, 0.2, 0.05, self.app.settings["MAIN_FONT"], text = "File Cards")
 
         # adding the button which adds a new file cards
-        # self.add_btn = Button(self.file_card_x + self.file_card_width / 2, self.file_card_y + self.file_card_height / 2, self.btn_size, self.btn_size,
-        #                       self.app.settings["MAIN_FONT"], text = "Add/Load")
-
         self.add_btn = PixelButton(self.file_card_x + self.file_card_width / 2, self.file_card_y + self.file_card_height / 2, self.btn_size, self.btn_size + 0.01,
                                    "res/AddButton1/non_hovering.png", hover_img_path = "res/AddButton1/hovering.png")
         
@@ -42,12 +40,14 @@ class FileManager(ScrollableFrame):
         self.add_child(self.add_btn)
         self.add_child(heading)
         
-
     # adds a file card to the UI
     def add_file_card(self):
         file_card = FileCard(self.file_card_x, self.file_card_y + self.delta, self.file_card_width, self.file_card_height, self.app.settings["MAIN_FONT"])
         self.add_child(file_card)
         self.change_coords()
+
+    def add_default_inputs(self, name : str):
+        pass
 
     # removes and unloads a file card and a file
     # repositions all the other file cards accordingly

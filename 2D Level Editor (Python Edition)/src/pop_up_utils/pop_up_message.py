@@ -2,7 +2,8 @@ import pygame as pg
 from utils import Console, Animation
 
 """
-This module provides a way to send messages to the user
+This module provides a way to send messages to the user, the message
+disappears after the specified amount of time
 """
 
 

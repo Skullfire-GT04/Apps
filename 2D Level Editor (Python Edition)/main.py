@@ -37,10 +37,10 @@ class App:
         
         # adding default widgets and frames to the app
         self.docker = DockerFrame(self)
-        self.docker.add_frame("Files", "file_manager", app = self, docker = self.docker)
+        self.docker.add_frame("Files", "file_manager", app = self, docker = self.docker, pop_up_window = self.pop_up_window)
         self.docker.add_frame("Sprites", "sprite_manager")
         self.independent_widgets = []
-        self.pop_up_window = PopUpWindow(self.settings["MAIN_FONT"], self.anim_manager)
+        self.pop_up_window = PopUpWindow(self.settings["INPUT_FONT"], self.anim_manager)
 
     def load_main_settings(self):
         try:
@@ -61,13 +61,10 @@ class App:
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False
 
-                if event.type == pg.KEYDOWN and event.key == pg.K_k: 
-                    self.pop_up_window.ask_input(["Name", "Age", "Address"])
-
-                self.pop_up_window.update(event)
+                if self.pop_up_window.active: self.pop_up_window.update(event)
 
                 # updating the current frame if no pop-up input field is active
-                if not self.pop_up_window.active:
+                if not self.pop_up_window.active or event.type == pg.VIDEORESIZE:
                     self.docker.update(event)
 
             # clearing the screen

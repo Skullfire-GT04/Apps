@@ -23,22 +23,26 @@ class PopUpWindow:
         self.font = font
         self.anim_manager = anim_manager
         self.active = False
+        self.output = dict()
 
         # size configurations (pixel sizes)
         self.max_label_width = 300
-        self.max_input_width = 200
-        self.label_height = 40
-        self.input_height = 40
-        self.label_text_size = int(self.label_height * 0.8)
+        self.max_input_width = 300
+        self.label_height = 30
+        self.input_height = 30
+        self.label_text_size = int(self.label_height * 0.9)
         self.input_text_size = int(self.input_height * 0.8)
-        self.padding = 10
-        self.gap = 10
+        self.padding = 20
+        self.gap = 30
+        self.submit_btn_width = 150
+        self.submit_btn_height = 30
+        self.submit_btn_text_size = int(self.submit_btn_height * 0.5)
 
-    def ask_input(self, fields : List[str]):
+    def ask_input(self, fields : List[str], callback):
         if not fields: return
         self.active = True
-        width = (max(self.max_label_width, self.max_input_width) + (2 * self.padding)) / pg.display.get_window_size()[0]
-        height = ((max(self.label_height, self.input_height) * (2 * len(fields))) + (2 * self.padding) + (2 * len(fields) * self.gap)) / pg.display.get_window_size()[1]
+        width = (max(self.max_label_width, self.max_input_width, self.submit_btn_width) + (2 * self.padding)) / pg.display.get_window_size()[0]
+        height = ((max(self.label_height, self.input_height) * (2 * len(fields))) + (2 * self.padding) + (2 * len(fields) * self.gap) + self.submit_btn_height) / pg.display.get_window_size()[1]
 
         if height > 1:
             self.container = ScrollableFrame(-width, 0.1, width, height)
@@ -56,19 +60,36 @@ class PopUpWindow:
         x_padding = self.padding / self.container.rect.width
         x = x_padding
         y = y_padding
+        submit_btn_width = self.submit_btn_width / self.container.rect.width
+        submit_btn_height = self.submit_btn_height / self.container.rect.height
 
         for field in fields:
-            self.container.add_child(Label(x, y, label_width, label_height, self.font, padding = self.label_height - self.label_text_size, text_size = self.label_text_size, text = field))
+            self.container.add_child(Label(x, y, label_width, label_height, self.font, padding = (self.label_height - self.label_text_size) / 2, text_size = self.label_text_size, text = field))
             y += label_height + gap
-            input_box = InputBox(x, y, input_width, input_height, self.font, text_size = self.input_text_size, placeholder = field, padding = self.input_height - self.input_text_size)
+            input_box = InputBox(x, y, input_width, input_height, self.font, text_size = self.input_text_size, placeholder = field, padding = (self.input_height - self.input_text_size) / 2, border_width = 2)
             y += input_height + gap
             self.container.add_child(input_box)
             self.input_boxes.append(input_box)
+
+        submit_btn = Button((1 - submit_btn_width) / 2, y, submit_btn_width, submit_btn_height, self.font, text = "Submit", text_size = self.submit_btn_text_size, padding = (self.submit_btn_height - self.submit_btn_text_size) / 2)
+        submit_btn.set_command(lambda: self.submit(callback))
+        submit_btn.toggle_key_binding(pg.K_KP_ENTER)
+        self.container.add_child(submit_btn)
+
         self.return_fields = fields
         self.anim_manager.add_widget_animation(self.container, "translate_x", 200, (1 - width) / 2 ,0.1, 1)
 
     def draw(self, display : pg.display):
         self.container.draw(display)
+
+    def submit(self, callback):
+        self.output = dict()
+        for i in range(len(self.return_fields)):
+            self.output[self.return_fields[i]] = self.input_boxes[i].text if self.input_boxes[i].typed_in else ""
+        self.anim_manager.add_widget_animation(self.container, "translate_x", 200, -1, 1, 1)
+        self.input_boxes = []
+        self.active = False
+        callback()
 
     def update(self, event : pg.event.Event):
         self.container.update(event)

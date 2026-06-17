@@ -45,3 +45,10 @@ class FileCard(BorderFrame):
 
     def toggle_edit_mode(self):
         self.editing = not self.editing
+
+    def set_values(self, name : str, save_location : str):
+        self.name = name
+        self.save_location = save_location
+        self.name_input.set_text(name)
+        self.path_input.set_text(name)
+    
