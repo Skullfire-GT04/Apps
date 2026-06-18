@@ -13,7 +13,6 @@ class FileManager(ScrollableFrame):
         super().__init__(0, 0, 1, 1)
         self.app = kwargs["app"]
         self.docker = kwargs["docker"]
-        self.pop_up_window = kwargs["pop_up_window"]
 
         # constants
 

@@ -1,4 +1,5 @@
 import pygame as pg
+from .pop_up_template import PopUp
 from utils import Console, Animation
 
 """
@@ -7,10 +8,17 @@ disappears after the specified amount of time
 """
 
 
-class PopUpMessage:
+class PopUpMessage(PopUp):
 
-    def __init__(self, display : pg.display, font_path : str, animation_manager : Animation):
-        self.container = Console(-1, -1, 0, 0, font_path)
-        self.font = self.container.font
-        self.display = display
-        self.anim_manager = animation_manager
+    def __init__(self, font_path : str, animation_manager : Animation):
+        super().__init__(font_path, self.anim_manager)
+
+        # size configurations (pixel sizes)
+        self.text_size = 20
+
+        self.font_copy = pg.font.Font(font_path, self.text_size)
+
+    def show_message(self, msg : str, time : int):
+
+        # calculating appropriate size for container
+        pass

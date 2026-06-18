@@ -16,8 +16,8 @@ TODO:
 
 import pygame as pg
 from json import load
-from utils import Animation, InputBox
-from src import DockerFrame, FileManager, PopUpWindow
+from utils import Animation
+from src import DockerFrame, PopUpWindow, PopUpMessage, PopUpChoice
 
 
 class App:
@@ -34,13 +34,18 @@ class App:
         pg.display.set_caption(self.settings["APP_NAME"])
         self.clock = pg.time.Clock()
         self.anim_manager = Animation()
+
+        # flags
+        self.input_pop_up = False
         
         # adding default widgets and frames to the app
         self.docker = DockerFrame(self)
-        self.docker.add_frame("Files", "file_manager", app = self, docker = self.docker, pop_up_window = self.pop_up_window)
+        self.pop_up_window = PopUpWindow(self.settings["INPUT_FONT"], self.anim_manager)
+        self.pop_up_message = PopUpMessage(self.font.settings["MAIN_FONT"], self.anim_manager)
+
+        self.docker.add_frame("Files", "file_manager", app = self, docker = self.docker)
         self.docker.add_frame("Sprites", "sprite_manager")
         self.independent_widgets = []
-        self.pop_up_window = PopUpWindow(self.settings["INPUT_FONT"], self.anim_manager)
 
     def load_main_settings(self):
         try:
@@ -76,6 +81,7 @@ class App:
             # drawing frames
             self.docker.draw(self.screen)
             self.pop_up_window.draw(self.screen)
+
 
             pg.display.update()
             self.clock.tick(self.settings["FPS"])

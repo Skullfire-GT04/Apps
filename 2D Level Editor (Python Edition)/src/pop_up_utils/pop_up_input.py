@@ -1,6 +1,7 @@
 import pygame as pg
 from typing import List
 from utils import BorderFrame, Label, InputBox, Button, ScrollableFrame, Animation
+from .pop_up_template import PopUp
 
 
 """
@@ -11,18 +12,17 @@ FEATURE: It can have multiple input fields for a single pop-up window
          and you can re-use the same object more than once for different input needs
 
 RETURN TYPE: after each input submission it returns a dictionary with the input items
+             (I say return but the process invoking the input as to access the output)
 """
 
 
-class PopUpWindow:
+class PopUpWindow(PopUp):
 
     def __init__(self, font : str, anim_manager : Animation):
-        self.container = BorderFrame(-1, -1, 0, 0)
+        super().__init__(font, anim_manager)
+
         self.input_boxes = []
         self.return_fields = []
-        self.font = font
-        self.anim_manager = anim_manager
-        self.active = False
         self.output = dict()
 
         # size configurations (pixel sizes)
@@ -79,9 +79,6 @@ class PopUpWindow:
         self.return_fields = fields
         self.anim_manager.add_widget_animation(self.container, "translate_x", 200, (1 - width) / 2 ,0.1, 1)
 
-    def draw(self, display : pg.display):
-        self.container.draw(display)
-
     def submit(self, callback):
         self.output = dict()
         for i in range(len(self.return_fields)):
@@ -90,6 +87,3 @@ class PopUpWindow:
         self.input_boxes = []
         self.active = False
         callback()
-
-    def update(self, event : pg.event.Event):
-        self.container.update(event)
