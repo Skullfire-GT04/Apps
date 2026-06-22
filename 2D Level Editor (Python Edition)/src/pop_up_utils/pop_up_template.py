@@ -4,6 +4,9 @@ from utils import Animation, BorderFrame
 """
 This module defines the basis of all pop up widgets defined
 in this folder
+
+NOTE: All pop-up-widgets defined with this template have the parent
+      set to the main window
 """
 
 class PopUp:
@@ -17,5 +20,5 @@ class PopUp:
     def draw(self, display : pg.Surface):
         self.container.draw(display)
 
-    def update(self, event : pg.Event.event):
+    def update(self, event : pg.event):
         self.container.update(event)

@@ -18,8 +18,6 @@ class ScrollableFrame(Frame):
         super().__init__(x, y, width, height, bd_radius = bd_radius)
         self.scroll_speed = 0.05
         self.type = "scrollable_frame"
-        self.highest_y_val = 0
-        self.lower_scroll_margin = 0.05
         self.delta = 0        
     
     def scroll_children(self, value : float):
@@ -34,16 +32,10 @@ class ScrollableFrame(Frame):
             
             # adding scroll limits
             if self.delta > 0: self.delta = 0
-            elif self.highest_y_val + self.lower_scroll_margin + self.delta <= 0: 
-                self.delta = - (self.highest_y_val + self.lower_scroll_margin)
 
             # scrolling the children
-            if self.delta and self.delta != -(self.highest_y_val + self.lower_scroll_margin): 
+            if self.delta: 
                 self.scroll_children(-self.scroll_speed if event.y < 1 else self.scroll_speed)
-
-    def add_child(self, child):
-        super().add_child(child)
-        if child.y + child.height > self.highest_y_val: self.highest_y_val = child.y + child.height
 
     def delete_child(self, child):
         super().delete_child(child)

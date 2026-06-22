@@ -15,6 +15,7 @@ TODO:
 """
 
 import pygame as pg
+from typing import List
 from json import load
 from utils import Animation
 from src import DockerFrame, PopUpWindow, PopUpMessage, PopUpChoice
@@ -38,10 +39,12 @@ class App:
         # flags
         self.input_pop_up = False
         
+        
         # adding default widgets and frames to the app
         self.docker = DockerFrame(self)
         self.pop_up_window = PopUpWindow(self.settings["INPUT_FONT"], self.anim_manager)
-        self.pop_up_message = PopUpMessage(self.font.settings["MAIN_FONT"], self.anim_manager)
+        self.pop_up_message = PopUpMessage(self.settings["MAIN_FONT"], self.anim_manager)
+        self.pop_up_choice = PopUpChoice(self.settings["INPUT_FONT"], self.anim_manager)
 
         self.docker.add_frame("Files", "file_manager", app = self, docker = self.docker)
         self.docker.add_frame("Sprites", "sprite_manager")
@@ -67,6 +70,8 @@ class App:
                     self.running = False
 
                 if self.pop_up_window.active: self.pop_up_window.update(event)
+                if self.pop_up_message.active: self.pop_up_message.update(event)
+                if self.pop_up_choice.active: self.pop_up_choice.update(event)
 
                 # updating the current frame if no pop-up input field is active
                 if not self.pop_up_window.active or event.type == pg.VIDEORESIZE:
@@ -81,11 +86,23 @@ class App:
             # drawing frames
             self.docker.draw(self.screen)
             self.pop_up_window.draw(self.screen)
+            self.pop_up_choice.draw(self.screen)
+            self.pop_up_message.draw(self.screen)
 
+            self.show_message("Hello there", 1000)
 
             pg.display.update()
             self.clock.tick(self.settings["FPS"])
         pg.quit()
+
+    def show_message(self, msg : str, time : int):
+        self.pop_up_message.show_message(msg, time)
+
+    def ask_input(self, params : List[str], callback):
+        self.pop_up_window.ask_input(params, callback)
+
+    def ask_choice(self, choices : List[str], msg : str, callback):
+        self.pop_up_choice.ask_choice(msg, choices, callback = callback)
 
 
 if __name__ == "__main__":
