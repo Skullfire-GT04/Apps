@@ -14,11 +14,17 @@ class PopUp:
     def __init__(self, font : str, anim_manager : Animation):
         self.font = font
         self.anim_manager = anim_manager
-        self.container = BorderFrame(-1, -1, 0, 0)
+        self.container = None
         self.active = False
 
     def draw(self, display : pg.Surface):
+        if not self.container: return
         self.container.draw(display)
 
     def update(self, event : pg.event):
+        if not self.container: return
         self.container.update(event)
+
+    def cleanup(self):
+        self.container = None
+        

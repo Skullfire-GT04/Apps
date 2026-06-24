@@ -17,7 +17,7 @@ TODO:
 import pygame as pg
 from typing import List
 from json import load
-from utils import Animation
+from utils import Animation, MultiLineLabel
 from src import DockerFrame, PopUpWindow, PopUpMessage, PopUpChoice
 
 
@@ -43,11 +43,12 @@ class App:
         # adding default widgets and frames to the app
         self.docker = DockerFrame(self)
         self.pop_up_window = PopUpWindow(self.settings["INPUT_FONT"], self.anim_manager)
-        self.pop_up_message = PopUpMessage(self.settings["MAIN_FONT"], self.anim_manager)
+        self.pop_up_message = PopUpMessage(self.settings["INPUT_FONT"], self.anim_manager)
         self.pop_up_choice = PopUpChoice(self.settings["INPUT_FONT"], self.anim_manager)
 
         self.docker.add_frame("Files", "file_manager", app = self, docker = self.docker)
         self.docker.add_frame("Sprites", "sprite_manager")
+
         self.independent_widgets = []
 
     def load_main_settings(self):
@@ -69,12 +70,12 @@ class App:
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False
 
-                if self.pop_up_window.active: self.pop_up_window.update(event)
-                if self.pop_up_message.active: self.pop_up_message.update(event)
-                if self.pop_up_choice.active: self.pop_up_choice.update(event)
+                self.pop_up_window.update(event)
+                self.pop_up_message.update(event)
+                self.pop_up_choice.update(event)
 
                 # updating the current frame if no pop-up input field is active
-                if not self.pop_up_window.active or event.type == pg.VIDEORESIZE:
+                if (not self.pop_up_window.active and not self.pop_up_choice.active) or event.type == pg.VIDEORESIZE:
                     self.docker.update(event)
 
             # clearing the screen
@@ -88,8 +89,6 @@ class App:
             self.pop_up_window.draw(self.screen)
             self.pop_up_choice.draw(self.screen)
             self.pop_up_message.draw(self.screen)
-
-            self.show_message("Hello there", 1000)
 
             pg.display.update()
             self.clock.tick(self.settings["FPS"])

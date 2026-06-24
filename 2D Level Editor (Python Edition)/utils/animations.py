@@ -106,7 +106,7 @@ class Animation:
         return reached_width and reached_height
     
     # adds a new animation to the animation stack
-    def add_widget_animation(self, widget : Widget, anim_type : str, time : int, x : float, y : float, scale : float):
+    def add_widget_animation(self, widget : Widget, anim_type : str, time : int, x : float, y : float, scale : float, callback = lambda : None):
         if not self.anim_map.get(anim_type, None): return
 
         # validating animation arguments
@@ -137,7 +137,8 @@ class Animation:
                 "x" : x,
                 "y" : y,
                 "delta" : delta,
-                "last_time" : pg.time.get_ticks()
+                "last_time" : pg.time.get_ticks(),
+                "callback" : callback
             }
         else: 
             self.animation_stack[self.count] = {
@@ -148,7 +149,8 @@ class Animation:
                 "end_w" : end_w,
                 "end_h" : end_h,
                 "scale" : scale,
-                "last_time" : pg.time.get_ticks()
+                "last_time" : pg.time.get_ticks(),
+                "callback" : callback
             }
         self.count += 1
 
@@ -157,6 +159,7 @@ class Animation:
         del_items = []
         for key in self.animation_stack.keys():
             if self.anim_map[self.animation_stack[key]["anim_type"]](key):
+                self.animation_stack[key]["callback"]()
                 del_items.append(key)
 
         if not del_items: return

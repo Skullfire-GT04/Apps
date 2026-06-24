@@ -9,7 +9,7 @@ but adds a border around the frame
 
 class BorderFrame(Frame):
 
-    def __init__(self, x : int, y : int, width : int, height : int, bd_radius = 10, border_width = 10):
+    def __init__(self, x : float, y : float, width : float, height : float, bd_radius = 10, border_width = 10):
         super().__init__(x, y, width, height, bd_radius)
         self.bd_width = border_width
 

@@ -25,23 +25,14 @@ class MultiLineLabel(Label):
 
     # clamps text according to the widget width
     def calc_display_text(self):  
-        self.display_chunks = []
-        temp = ""
-        for ch in self.text:
-            if ch == '\n': 
-                self.display_chunks.append(temp) 
-                temp = ""
-            elif self.font.size(temp)[0] > self.rect.width:
-                self.display_chunks.append(temp[:-1])
-                temp = temp[-1]
-            else: temp += ch
+        self.display_chunks = self.text.split("\n")
         self.clamp_height()
 
     # clamps text according to widget height
     def clamp_height(self):
-        unit = self.font.size("a")[1] + self.text_gap
+        unit = self.font.size("A")[1] + self.text_gap
         total_units = ceil(self.rect.height / unit)
-        self.display_chunks = self.display_chunks[:total_units]
+        self.display_chunks = self.display_chunks[:total_units + 1]
             
     def calc_text_pos(self):
         self.text_starting_x = self.rect.x

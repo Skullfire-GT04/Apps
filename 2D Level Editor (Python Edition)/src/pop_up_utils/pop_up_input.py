@@ -83,7 +83,7 @@ class PopUpWindow(PopUp):
         self.output = dict()
         for i in range(len(self.return_fields)):
             self.output[self.return_fields[i]] = self.input_boxes[i].text if self.input_boxes[i].typed_in else ""
-        self.anim_manager.add_widget_animation(self.container, "translate_x", 200, -1, 1, 1)
+        self.anim_manager.add_widget_animation(self.container, "translate_x", 200, -1, 1, 1, callback = self.cleanup)
         self.input_boxes = []
         self.active = False
         callback()
