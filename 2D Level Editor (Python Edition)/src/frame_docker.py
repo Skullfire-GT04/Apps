@@ -18,19 +18,19 @@ class DockerFrame:
             "sprite_manager" : SpriteManager
         }
 
-    def add_frame(self, name : str, type : str, *args, **kwargs):
+    def add_frame(self, name : str, type_ : str, *args, **kwargs):
         if self.frames.get(name, None): return
-        if not self.frame_type_map.get(type, None): return
+        if not self.frame_type_map.get(type_, None): return
         
         temp = None
         if not args and not kwargs:
-            temp = self.frame_type_map[type]()
+            temp = self.frame_type_map[type_]()
         elif args and not kwargs:
-            temp = self.frame_type_map[type](args)
+            temp = self.frame_type_map[type_](args)
         elif kwargs and not args:
-            temp = self.frame_type_map[type](kwargs)
+            temp = self.frame_type_map[type_](kwargs)
         else:
-            temp = self.frame_type_map[type](args, kwargs)
+            temp = self.frame_type_map[type_](args, kwargs)
         
         index = len(self.frames)
         btn = Button(self.curr_x, 1 - self.label_height, self.max_label_width, self.label_height, self.app.settings["MAIN_FONT"], text = name)

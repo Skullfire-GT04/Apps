@@ -3,5 +3,7 @@
     "SCREEN_SIZE" : [1200, 800],
     "MAIN_FONT" : "res/main_font.ttf",
     "INPUT_FONT" : "res/input_font.ttf",
-    "APP_NAME" : "2D Map Editor"
+    "APP_NAME" : "2D Map Editor",
+    "SPRITE_MANAGER_NAME" : "Sprites",
+    "FILE_MANAGER_NAME" : "Files"
 }

@@ -46,8 +46,8 @@ class App:
         self.pop_up_message = PopUpMessage(self.settings["INPUT_FONT"], self.anim_manager)
         self.pop_up_choice = PopUpChoice(self.settings["INPUT_FONT"], self.anim_manager)
 
-        self.docker.add_frame("Files", "file_manager", app = self, docker = self.docker)
-        self.docker.add_frame("Sprites", "sprite_manager")
+        self.docker.add_frame(self.settings["FILE_MANAGER_NAME"], "file_manager", app = self, docker = self.docker)
+        self.docker.add_frame(self.settings["SPRITE_MANAGER_NAME"], "sprite_manager", app = self)
 
         self.independent_widgets = []
 

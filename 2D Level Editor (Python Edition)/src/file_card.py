@@ -1,6 +1,9 @@
 from utils import BorderFrame, Label, InputBox, Button, PixelButton
 
-
+"""
+This module represents a singular file that the app is working on,
+it stores the data the file has generated and the save location
+"""
 
 class FileCard(BorderFrame):
 
