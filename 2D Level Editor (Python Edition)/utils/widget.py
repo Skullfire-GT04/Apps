@@ -12,6 +12,7 @@ class Widget:
         self.x = x 
         self.y = y
         self.rect = None
+        self.enabled = True
         self.type = "widget"
         self.clr_settings = None
         self.id = None
@@ -97,3 +98,9 @@ class Widget:
 
     def parent_changes(self):
         self.calc_new_rect()
+
+    def enable(self):
+        self.enabled = True
+
+    def disable(self):
+        self.enabled = False

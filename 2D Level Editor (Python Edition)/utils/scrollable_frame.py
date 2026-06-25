@@ -26,6 +26,7 @@ class ScrollableFrame(Frame):
 
     def update(self, event : pg.Event):
         super().update(event)
+        if not self.enabled: return
 
         if event.type == pg.MOUSEWHEEL:
             self.delta += - self.scroll_speed if event.y < 1 else self.scroll_speed

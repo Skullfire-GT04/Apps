@@ -56,6 +56,7 @@ class CheckButton(Widget):
 
     def update(self, event):
         super().update(event)
+        if not self.enabled: return
 
         if hasattr(event, "pos"):
             x = self.rect.x

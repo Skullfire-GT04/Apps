@@ -26,11 +26,11 @@ class DockerFrame:
         if not args and not kwargs:
             temp = self.frame_type_map[type_]()
         elif args and not kwargs:
-            temp = self.frame_type_map[type_](args)
+            temp = self.frame_type_map[type_](*args)
         elif kwargs and not args:
-            temp = self.frame_type_map[type_](kwargs)
+            temp = self.frame_type_map[type_](**kwargs)
         else:
-            temp = self.frame_type_map[type_](args, kwargs)
+            temp = self.frame_type_map[type_](*args, **kwargs)
         
         index = len(self.frames)
         btn = Button(self.curr_x, 1 - self.label_height, self.max_label_width, self.label_height, self.app.settings["MAIN_FONT"], text = name)

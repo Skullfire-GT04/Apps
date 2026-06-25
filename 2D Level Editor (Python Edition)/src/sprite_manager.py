@@ -10,8 +10,9 @@ You can also add frames or delete frames from an animation
 
 class SpriteManager(ScrollableFrame):
 
-    def __init__(self, **kwargs):
+    def __init__(self, app):
         super().__init__(0, 0, 1, 1)
+        self.app = app
         self.sprite_mapping = dict()
 
     def create_sprite_group(self, name : str):

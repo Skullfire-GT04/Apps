@@ -24,6 +24,10 @@ class InputBox(Console):
         self.selected = False
         self.tick_width = 2
 
+    def set_text(self, new_text):
+        super().set_text(new_text)
+        self.typed_in = True
+
     def draw(self, display : pg.Surface):
         if self.selected:
             temp = pg.time.get_ticks()
@@ -71,6 +75,7 @@ class InputBox(Console):
 
     def update(self, event : pg.event):
         super().update(event)
+        if not self.enabled: return
 
         if hasattr(event, "pos"):
             x = self.rect.x

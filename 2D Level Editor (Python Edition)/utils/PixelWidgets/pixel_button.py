@@ -14,6 +14,7 @@ class PixelButton(Button):
         self.load_color_settings("button")
         self.command = command
         self.bindings = {}
+        self.enabled = True
         self.hovering = False        
         self.parent = None
         self.id = None

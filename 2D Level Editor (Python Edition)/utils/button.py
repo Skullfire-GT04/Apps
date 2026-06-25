@@ -43,6 +43,7 @@ class Button(Label):
     # updates the button based on the event passed
     def update(self, event : pg.event.Event):
         super().update(event)
+        if not self.enabled: return
 
         # checking if the event is mouse related and the mouse pointer collides with the button area
         if hasattr(event, "pos"):

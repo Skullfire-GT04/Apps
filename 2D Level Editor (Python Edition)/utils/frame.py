@@ -46,6 +46,8 @@ class Frame(Widget):
                 self.children[child].update(event)
             return
 
+        if not self.enabled: return
+
         for child_type in EVENT_MAP.get(event.type, tuple()):
             for child in self.child_grouping[self.child_event_map[child_type]].values():
                 child.update(event)

@@ -74,6 +74,7 @@ class Slider(Widget):
 
     def update(self, event : pg.event):
         super().update(event)
+        if not self.enabled: return
 
         if event.type == pg.MOUSEBUTTONUP:
             self.selected = False

@@ -100,7 +100,13 @@ class App:
     def ask_input(self, params : List[str], callback):
         self.pop_up_window.ask_input(params, callback)
 
-    def ask_choice(self, choices : List[str], msg : str, callback):
+    def get_input(self):
+        return self.pop_up_window.output
+    
+    def get_choice(self):
+        return self.pop_up_choice.output
+
+    def ask_choice(self, msg : str, choices : List[str], callback):
         self.pop_up_choice.ask_choice(msg, choices, callback = callback)
 
 
