@@ -2,6 +2,7 @@ import pygame as pg
 from utils.button import Button
 from .file_manager import FileManager
 from .sprite_manager import SpriteManager
+from .canavs import Canvas
 
 
 class DockerFrame:
@@ -15,7 +16,8 @@ class DockerFrame:
         self.app = app
         self.frame_type_map = {
             "file_manager" : FileManager,
-            "sprite_manager" : SpriteManager
+            "sprite_manager" : SpriteManager,
+            "canvas" : Canvas
         }
 
     def add_frame(self, name : str, type_ : str, *args, **kwargs):
@@ -43,12 +45,24 @@ class DockerFrame:
         }
 
         self.curr_x += self.max_label_width
-        self.curr_frame = name
+        if not self.curr_frame: self.curr_frame = name
 
     # changes the current selected frame to the given index
     def change_frame(self, name : str):
         self.curr_frame = name
         self.frames[self.curr_frame]["frame"].update(pg.event.Event(pg.VIDEORESIZE))
+
+    def change_frame_name(self, name : str, new_name : str):
+        if not self.frames.get(name, None): return
+        if self.frames.get(new_name, None): return
+
+        data = self.frames[name]
+        del self.frames[name]
+        self.frames[new_name] = data
+        data["btn"].set_text(new_name)
+        data["btn"].set_command(lambda: self.change_frame(new_name))
+
+        if self.curr_frame == name: self.curr_frame = new_name
 
     def delete_frame(self, name : str):
         if not self.frames.get(name, None): return
@@ -59,7 +73,7 @@ class DockerFrame:
         for i in range(index + 1, len(self.frames)):
             self.frames[names[i]]["btn"].change_x(self.frames[names[i]]["btn"].x - self.max_label_width)
             self.frames[names[i]]["index"] -= 1
-
+        self.curr_x -= self.max_label_width
         del self.frames[name]
 
     # updates the current selected frame and all the labels

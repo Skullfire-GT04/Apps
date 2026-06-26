@@ -15,6 +15,7 @@ class FileManager(ScrollableFrame):
         super().__init__(0, 0, 1, 1)
         self.app = app
         self.docker = docker
+        self.files = dict()
 
         # constants
 
@@ -60,7 +61,7 @@ class FileManager(ScrollableFrame):
             return
 
         # checking if the file name already exists as one of the active files
-        if self.docker.frames.get(output["Name"], None):
+        if self.files.get(output["Name"], None):
             self.app.show_message("File with this name exists already!", 3000)
             return
         
@@ -75,17 +76,34 @@ class FileManager(ScrollableFrame):
             file_card = FileCard(self.file_card_x, self.file_card_y + self.delta, self.file_card_width, self.file_card_height, self.app.settings["MAIN_FONT"], name, save_location, self.app, self)
         else:
             file_card = self.load_file(path.join(save_location, name))
-        self.add_child(file_card)
-        self.change_coords()
+
+        if file_card:
+            self.add_file(name, file_card = file_card)
+            self.add_child(file_card)
+            self.change_coords()
+        else:
+            if choice == "Load":
+                self.app.show_message("Failed to load file, please make sure it is in the correct directory!", 3500)
+            else:
+                self.app.show_message("Failed to create new file, please try again!", 3000)
 
     # removes and unloads a file card and a file
     # repositions all the other file cards accordingly
+    def ask_remove_file_card(self, name : str):
+        self.app.ask_choice("Are you sure? (Invincible meme lol)", ["Yes", "Nah"], lambda name=name: self.remove_file_card(name))
+
     def remove_file_card(self, name : str):
-        pass
+        choice = self.app.get_choice()
+        if choice == "Nah": return
+        self.delete_child(self.files[name])
+        index = list(self.files.keys()).index(name)
+        del self.files[name]
+        self.docker.delete_frame(name)
+        self.change_coords(added = False, after_index = index)
 
     # repositions the add_btn and changed the coordinate for the next
     # file card
-    def change_coords(self, added = True):
+    def change_coords(self, added = True, after_index = None):
         if added:
             self.file_card_x += self.file_card_width + self.margin
 
@@ -96,10 +114,48 @@ class FileManager(ScrollableFrame):
             self.add_btn.change_x(self.file_card_x + self.file_card_width / 2)
             self.add_btn.change_y((self.file_card_y + self.delta) + self.file_card_height / 2)
 
+        else:
+            max_card = int(1 / self.file_card_width)
+
+            self.file_card_x -= self.file_card_width + self.margin
+            if self.file_card_x < self.margin:
+                self.file_card_x = self.margin * max_card + (max_card - 1) * self.file_card_width
+                self.file_card_y -= self.file_card_height + self.margin
+
+            self.add_btn.change_x(self.file_card_x + self.file_card_width / 2)
+            self.add_btn.change_y((self.file_card_y + self.delta) + self.file_card_height / 2)
+
+            temp = list(self.files.keys())
+            for i in range(after_index, len(temp)):
+                card = self.files[temp[i]]
+                x = card.x
+                y = card.y
+
+                new_x = x - (self.file_card_width + self.margin)
+                new_y = y
+                if new_x < self.margin:
+                    new_x = self.margin * max_card + (max_card - 1) * self.file_card_width
+                    new_y = y - (self.file_card_width + self.margin)
+                card.change_x(new_x)
+                card.change_y(new_y)
+
+            for name in temp:
+                print(name, self.files[name].rect)
+
     # creates a new file 
-    def add_file(self, name : str):
-        pass
+    def add_file(self, name : str, file_card : FileCard):
+        self.files[name] = file_card
+        self.docker.add_frame(name, "canvas", app = self.app, docker = self.docker, file_manager = self)
     
     # tries to load a file from given file path
     def load_file(self, fp : str):
         pass
+    
+    # changes the name of the file_card internally, it does not check whether
+    # the new name is valid or not, so checks should be made before invoking this function
+    def change_file_card_name(self, name : str, new_name : str):
+        data = self.files[name]
+        del self.files[name]
+        self.files[new_name] = data
+        
+        

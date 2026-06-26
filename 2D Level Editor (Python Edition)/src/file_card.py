@@ -1,8 +1,9 @@
 from utils import BorderFrame, Label, InputBox, Button, PixelButton
+from os import path
 
 """
 This module represents a singular file that the app is working on,
-it stores the data the file has generated and the save location
+it stores the file name and the save location
 """
 
 class FileCard(BorderFrame):
@@ -54,10 +55,12 @@ class FileCard(BorderFrame):
 
         self.edit_btn.set_command(self.toggle_edit_mode)
         self.save_btn.set_command(self.save_changes)
-        self.delete_btn.set_command(self.manager.remove_file_card(self.name))
+        self.delete_btn.set_command(lambda: self.manager.ask_remove_file_card(self.name))
 
     def toggle_edit_mode(self):
         self.editing = not self.editing
+
+        self.app.show_message(f"Edit status :{self.editing}", 1000)
 
         if self.editing:
             self.name_input.enable()
@@ -65,10 +68,29 @@ class FileCard(BorderFrame):
         else:
             self.name_input.disable()
             self.path_input.disable()
-            self.save_changes()
+            self.name_input.set_text(self.name)
+            self.path_input.set_text(self.save_location)
 
+    # changes the edited name and save_location
+    # if the input is correct
     def save_changes(self):
-        pass
+        if not self.editing: return
 
-    
-    
+        if self.name_input.text != self.name:
+            if not self.name_input.text or self.name_input.text.isdigit():
+                self.app.show_message("Invalid name!", 1500)
+                return
+            if self.manager.files.get(self.name_input.text, None):
+                self.app.show_message("A file with this name already exists!", 1500)
+                return
+
+        if self.path_input.text != self.save_location:
+            if not path.exists(self.path_input.text):
+                self.app.show_message("Invalid path!", 1500)
+                return
+        
+        old_name = self.name[:]
+        self.name = self.name_input.text
+        self.save_location = self.path_input.text
+        self.manager.docker.change_frame_name(old_name, self.name)
+        self.manager.change_file_card_name(old_name, self.name)

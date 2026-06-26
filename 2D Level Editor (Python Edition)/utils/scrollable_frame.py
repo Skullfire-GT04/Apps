@@ -37,13 +37,3 @@ class ScrollableFrame(Frame):
             # scrolling the children
             if self.delta: 
                 self.scroll_children(-self.scroll_speed if event.y < 1 else self.scroll_speed)
-
-    def delete_child(self, child):
-        super().delete_child(child)
-        if child.y == self.highest_y_val:
-            self.highest_y_val = 0
-            for child in self.children.values():
-                if child.y + child.height > self.highest_y_val: self.highest_y_val = child.y + child.height
-
-                
-
