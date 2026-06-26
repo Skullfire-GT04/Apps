@@ -2,7 +2,7 @@ import pygame as pg
 from utils.button import Button
 from .file_manager import FileManager
 from .sprite_manager import SpriteManager
-from .canavs import Canvas
+from .canvas import Canvas
 
 
 class DockerFrame:

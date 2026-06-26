@@ -8,9 +8,7 @@ the scroll only work for the vertical axis
 NOTE: Any widget made from this class should take into account the delta
       or scroll value when adding children, the reason I have not added it in the add_child
       method explicitly is because I want to provide the user with full freedom
-
 """
-
 
 class ScrollableFrame(Frame):
 
