@@ -4,3 +4,4 @@ from .sprite_manager import SpriteManager
 from .pop_up_utils.pop_up_input import PopUpWindow
 from .pop_up_utils.pop_up_message import PopUpMessage
 from .pop_up_utils.pop_up_choice import PopUpChoice
+from .canvas import Canvas

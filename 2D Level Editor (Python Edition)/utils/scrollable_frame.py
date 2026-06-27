@@ -29,9 +29,6 @@ class ScrollableFrame(Frame):
         if event.type == pg.MOUSEWHEEL:
             self.delta += - self.scroll_speed if event.y < 1 else self.scroll_speed
             
-            # adding scroll limits
-            if self.delta > 0: self.delta = 0
-
             # scrolling the children
             if self.delta: 
                 self.scroll_children(-self.scroll_speed if event.y < 1 else self.scroll_speed)

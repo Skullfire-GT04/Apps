@@ -1,5 +1,6 @@
 from utils import Button, Label, ScrollableFrame, PixelButton
 from .file_card import FileCard
+from .card_utility import move_cards
 from os import path
 
 
@@ -115,32 +116,16 @@ class FileManager(ScrollableFrame):
             self.add_btn.change_y((self.file_card_y + self.delta) + self.file_card_height / 2)
 
         else:
-            max_card = int(1 / self.file_card_width)
+            cards = list(self.files.values())
+            move_cards(after_index, cards, self.add_btn, self.file_card_width, self.file_card_height, self.margin)
 
             self.file_card_x -= self.file_card_width + self.margin
-            if self.file_card_x < self.margin:
-                self.file_card_x = self.margin * max_card + (max_card - 1) * self.file_card_width
+
+            if(self.file_card_x < self.margin):
+                max_cards = 1 // (self.file_card_width + self.margin)
+                self.file_card_x = self.margin * max_cards + (self.file_card_width * (max_cards - 1))
                 self.file_card_y -= self.file_card_height + self.margin
-
-            self.add_btn.change_x(self.file_card_x + self.file_card_width / 2)
-            self.add_btn.change_y((self.file_card_y + self.delta) + self.file_card_height / 2)
-
-            temp = list(self.files.keys())
-            for i in range(after_index, len(temp)):
-                card = self.files[temp[i]]
-                x = card.x
-                y = card.y
-
-                new_x = x - (self.file_card_width + self.margin)
-                new_y = y
-                if new_x < self.margin:
-                    new_x = self.margin * max_card + (max_card - 1) * self.file_card_width
-                    new_y = y - (self.file_card_width + self.margin)
-                card.change_x(new_x)
-                card.change_y(new_y)
-
-            for name in temp:
-                print(name, self.files[name].rect)
+            
 
     # creates a new file 
     def add_file(self, name : str, file_card : FileCard):
@@ -149,7 +134,7 @@ class FileManager(ScrollableFrame):
     
     # tries to load a file from given file path
     def load_file(self, fp : str):
-        pass
+        print(fp)
     
     # changes the name of the file_card internally, it does not check whether
     # the new name is valid or not, so checks should be made before invoking this function
