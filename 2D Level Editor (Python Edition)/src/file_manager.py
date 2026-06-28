@@ -18,6 +18,9 @@ class FileManager(ScrollableFrame):
         self.docker = docker
         self.files = dict()
 
+        # adding a heading label
+        heading = Label(0.4, 0.03, 0.2, 0.05, self.app.settings["MAIN_FONT"], text = "File Cards")
+
         # constants
 
         # file cards configurations
@@ -30,10 +33,9 @@ class FileManager(ScrollableFrame):
 
         # coordinate variables (don't touch these pls)
         self.file_card_x = self.margin
-        self.file_card_y = self.margin + 0.1
-
-        # adding a heading label
-        heading = Label(0.4, 0.03, 0.2, 0.05, self.app.settings["MAIN_FONT"], text = "File Cards")
+        self.original_y = self.margin + heading.y + heading.height
+        self.file_card_y = self.original_y
+        self.file_card_x_positions = [round(self.margin * i + self.file_card_width * (i - 1), 2) for i in range(1, int(1 // (self.file_card_width + self.margin)) + 1)]
 
         # adding the button which adds a new file cards
         self.add_btn = PixelButton(self.file_card_x + self.file_card_width / 2, self.file_card_y + self.file_card_height / 2, self.btn_size, self.btn_size + 0.01,
@@ -119,13 +121,13 @@ class FileManager(ScrollableFrame):
             cards = list(self.files.values())
             move_cards(after_index, cards, self.add_btn, self.file_card_width, self.file_card_height, self.margin)
 
-            self.file_card_x -= self.file_card_width + self.margin
-
-            if(self.file_card_x < self.margin):
+            self.file_card_x -= round(self.file_card_width + self.margin, 2)
+            if self.file_card_x < self.margin:
                 max_cards = 1 // (self.file_card_width + self.margin)
-                self.file_card_x = self.margin * max_cards + (self.file_card_width * (max_cards - 1))
-                self.file_card_y -= self.file_card_height + self.margin
-            
+                new_x = round(self.margin * max_cards + (self.file_card_width * (max_cards - 1)), 2)
+                self.file_card_x = new_x
+                self.file_card_y -= round(self.file_card_height + self.margin, 2)
+
 
     # creates a new file 
     def add_file(self, name : str, file_card : FileCard):

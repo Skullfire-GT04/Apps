@@ -12,13 +12,13 @@ def move_cards(index : int, cards : List[Widget], button : Widget, card_width : 
 
 # moves a widget back in a grid
 def move_card_back(widget : Widget, width : float, height : float, margin : float, is_button = False):
-    max_cards = int(1 / (width + margin))
-    widget.change_x(widget.x - width)
+    max_cards = 1 // (width + margin)
+    widget.change_x(round(widget.x - width, 2))
     if widget.x < margin:
-        widget.change_y(widget.y - (height + margin))
-        new_x = margin * max_cards + (width * (max_cards - 1))
+        widget.change_y(round(widget.y - (height + margin), 2))
+        new_x = round(margin * max_cards + (width * (max_cards - 1)), 2)
         widget.change_x(new_x)
         if is_button:
-            widget.change_x(widget.x + (width / 2))
+            widget.change_x(round(widget.x + (width / 2), 2))
     
         

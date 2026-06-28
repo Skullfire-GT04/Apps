@@ -1,6 +1,5 @@
 import pygame as pg
 from utils import Label, ScrollableFrame, PixelButton
-from .sprite_group import SpriteGroup
 
 """
 This module manages the loading of spritesheets or individual
@@ -18,28 +17,38 @@ class SpriteManager(ScrollableFrame):
         self.widget_mapping = dict() # stores references to sprite groups and animations
 
         # adding a heading (lol that rhymes)
-        heading = Label(0.4, 0.05, 0.2, 0.15, self.app.settings["INPUT_FONT"], text = "Sprite Groups")
+        heading = Label(0.4, 0.05, 0.2, 0.08, self.app.settings["INPUT_FONT"], text = "Sprite Groups")
         self.add_child(heading)
 
-        # constants
-        self.margin = 0.03
-        self.group_width = 0.44
-        self.group_height = 0.4
-
-        # group coords
-        self.group_card_x = self.margin
-        self.group_card_y = heading.y + heading.height + self.margin
+        # sprite card constants
+        self.sprite_card_width = 0.2
+        self.sprite_card_height = 0.2
+        self.margin = 0.05
 
         # button coords
-        self.btn_x = self.margin + (self.group_width / 2)
-        self.btn_y = self.group_height / 2 + heading.y + self.margin + heading.height
+        self.btn_x = self.margin + (self.sprite_card_width / 2)
+        self.btn_y = self.sprite_card_height / 2 + heading.y + self.margin + heading.height
 
         self.btn_size = 0.05
 
-        self.add_btn = PixelButton(self.btn_x, self.btn_y, self.btn_size, self.btn_size, "res/AddButton1/hovering.png", hover_img_path = "res/AddButton1/non_hovering.png",
+        self.add_btn = PixelButton(self.btn_x, self.btn_y, self.btn_size, self.btn_size, "res/OpenButton1/non_hovering.png",
                                    border_radius = 15)
         self.add_child(self.add_btn)
-        self.add_btn.set_command(lambda: self.app.ask_input(["Group Name"], self.create_sprite_group))
+        self.add_btn.set_command(lambda: self.app.ask_choice("Are you making a new group or adding a new sprite/animation to an existing group?", ["Group", "Sprite/Animation"], self.delegate_choice_creation))
+
+    def delegate_choice_creation(self):
+        choice = self.app.get_choice()
+
+        if choice == "Group":
+            self.app.ask_input(["Group Name"], self.create_sprite_group)
+        else:
+            self.app.ask_input(["Which group?"], self.delegate_choice_group)
+
+    def delegate_choice_group(self):
+        pass
+
+    def delegate_choice_loading(self):
+        pass
 
     def create_sprite_group(self):
         output = self.app.get_input()
@@ -56,13 +65,14 @@ class SpriteManager(ScrollableFrame):
             self.app.show_message("Group name cannot be a number!", 2500)
             return        
         
-        if self.widget_mapping.get(output["Group Name"], None):
-            self.app.show_message("Group with this name already exists!", 2500)
+        if self.sprite_mapping.get(output["Group Name"], None):
+            self.app.show_message("Group name is already taken!", 2500)
             return
-
-        self.widget_mapping[output["Group Name"]] = SpriteGroup(self.group_card_x, self.group_card_y, self.group_width, self.group_height, output["Group Name"], self.app.settings["INPUT_FONT"], self, self.app)
-        self.add_child(self.widget_mapping[output["Group Name"]])
-
+        self.sprite_mapping[output["Group Name"]] = dict()
+        
     def add_sprite_animation(self, name : str, group_name : str, fp : str, frame_width : int, frame_height : int):
+        pass
+
+    def add_sprite(self, name : str, group_name : str, fp : str, width : int, height : int):
         pass
 
