@@ -27,9 +27,13 @@ class PopUpChoice(PopUp):
         self.label_height = self.box_height - self.button_height - (2 * self.padding)
         self.label_text_size = 15
         self.button_text_size = 15
+        
+        self.font_copy = pg.font.Font(font, self.label_text_size)
 
     def ask_choice(self, msg : str, choices : List[str], callback = lambda: print("Finished taking choice")):
         if not choices: return
+
+        msg = "\n".join(self.format_msg(msg))
         
         width = (self.box_width  + 2 * self.padding) / pg.display.get_window_size()[0]
         height = (self.box_height + 2 * self.padding) / pg.display.get_window_size()[1]
@@ -56,6 +60,18 @@ class PopUpChoice(PopUp):
             x += rel_choice_width
         self.active = True
         self.anim_manager.add_widget_animation(self.container, "translate_x", 150, (1 - width) / 2, 0, 1)
+
+    def format_msg(self, msg : str) -> List[str]:
+        out = []
+        chunk = ""
+        words = msg.split(" ")
+        for word in words:
+            if self.font_copy.size(chunk)[0] > self.label_width:
+                out.append(chunk[:-1])
+                chunk = chunk[-1]
+            chunk += word + " "
+        out.append(chunk)
+        return out
 
     def submit(self, choice : str, callback):
         self.output = choice

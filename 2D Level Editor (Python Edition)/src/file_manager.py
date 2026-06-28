@@ -41,7 +41,7 @@ class FileManager(ScrollableFrame):
         self.add_btn = PixelButton(self.file_card_x + self.file_card_width / 2, self.file_card_y + self.file_card_height / 2, self.btn_size, self.btn_size + 0.01,
                                    "res/AddButton1/non_hovering.png", hover_img_path = "res/AddButton1/hovering.png")
         
-        self.add_btn.set_command(lambda: self.app.ask_input(["Name", "Save Location"], self.get_file_info))
+        self.add_btn.set_command(lambda: self.app.ask_input(["Name", "Save Location"], self.get_file_info, persist = True))
         self.add_child(self.add_btn)
         self.add_child(heading)
         
@@ -67,6 +67,8 @@ class FileManager(ScrollableFrame):
         if self.files.get(output["Name"], None):
             self.app.show_message("File with this name exists already!", 3000)
             return
+        
+        self.app.close_input()
         
         # asking the user for further clarification as to the status of the file
         self.app.ask_choice("Are you making a new file, or loading an old file?", ["Make New", "Load"], lambda: self.add_file_card(output["Name"], output["Save Location"]))

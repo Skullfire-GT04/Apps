@@ -1,4 +1,5 @@
-
+import pygame as pg
+from utils import Frame, Slider, CheckButton, Button
 
 class Canvas:
 

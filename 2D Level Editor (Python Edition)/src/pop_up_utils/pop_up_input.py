@@ -24,6 +24,7 @@ class PopUpWindow(PopUp):
         self.input_boxes = []
         self.return_fields = []
         self.output = dict()
+        self.persist = False
 
         # size configurations (pixel sizes)
         self.max_label_width = 300
@@ -34,13 +35,17 @@ class PopUpWindow(PopUp):
         self.input_text_size = int(self.input_height * 0.8)
         self.padding = 20
         self.gap = 30
-        self.submit_btn_width = 150
+        self.submit_btn_width = 120
         self.submit_btn_height = 30
         self.submit_btn_text_size = int(self.submit_btn_height * 0.5)
+        self.cancel_btn_width = self.submit_btn_width
+        self.cancel_btn_height = self.submit_btn_height
+        self.cancel_btn_text_size = int(self.cancel_btn_height * 0.5)
 
-    def ask_input(self, fields : List[str], callback):
+    def ask_input(self, fields : List[str], callback, persist = False):
         if not fields: return
         self.active = True
+        self.persist = persist
         width = (max(self.max_label_width, self.max_input_width, self.submit_btn_width) + (2 * self.padding)) / pg.display.get_window_size()[0]
         height = ((max(self.label_height, self.input_height) * (2 * len(fields))) + (2 * self.padding) + (2 * len(fields) * self.gap) + self.submit_btn_height) / pg.display.get_window_size()[1]
 
@@ -62,6 +67,8 @@ class PopUpWindow(PopUp):
         y = y_padding
         submit_btn_width = self.submit_btn_width / self.container.rect.width
         submit_btn_height = self.submit_btn_height / self.container.rect.height
+        cancel_btn_width = self.cancel_btn_width / self.container.rect.width
+        cancel_btn_height = self.cancel_btn_height / self.container.rect.height
 
         for field in fields:
             self.container.add_child(Label(x, y, label_width, label_height, self.font, padding = (self.label_height - self.label_text_size) / 2, text_size = self.label_text_size, text = field))
@@ -71,10 +78,15 @@ class PopUpWindow(PopUp):
             self.container.add_child(input_box)
             self.input_boxes.append(input_box)
 
-        submit_btn = Button((1 - submit_btn_width) / 2, y, submit_btn_width, submit_btn_height, self.font, text = "Submit", text_size = self.submit_btn_text_size, padding = (self.submit_btn_height - self.submit_btn_text_size) / 2)
+        submit_btn = Button(x_padding, y, submit_btn_width, submit_btn_height, self.font, text = "Submit", text_size = self.submit_btn_text_size, padding = (self.submit_btn_height - self.submit_btn_text_size) / 2)
         submit_btn.set_command(lambda: self.submit(callback))
         submit_btn.toggle_key_binding(pg.K_KP_ENTER)
+
+        cancel_btn = Button(1 - (x_padding + cancel_btn_width), y, cancel_btn_width, cancel_btn_height, self.font, text = "Cancel", text_size = self.cancel_btn_text_size, padding = (self.cancel_btn_height - self.cancel_btn_text_size) / 2)
+        cancel_btn.set_command(self.close)
+
         self.container.add_child(submit_btn)
+        self.container.add_child(cancel_btn)
 
         self.return_fields = fields
         self.anim_manager.add_widget_animation(self.container, "translate_x", 200, (1 - width) / 2 ,0.1, 1)
@@ -83,7 +95,11 @@ class PopUpWindow(PopUp):
         self.output = dict()
         for i in range(len(self.return_fields)):
             self.output[self.return_fields[i]] = self.input_boxes[i].text if self.input_boxes[i].typed_in else ""
+        callback()
+        if not self.persist: self.close()
+
+    def close(self):
         self.anim_manager.add_widget_animation(self.container, "translate_x", 200, -1, 1, 1, callback = self.cleanup)
         self.input_boxes = []
         self.active = False
-        callback()
+        self.persist = False

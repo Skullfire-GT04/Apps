@@ -10,14 +10,16 @@ You can also add frames or delete frames from an animation
 
 class SpriteManager(ScrollableFrame):
 
-    def __init__(self, app):
+    def __init__(self, app, docker):
         super().__init__(0, 0, 1, 1)
         self.app = app
+        self.docker = docker
         self.sprite_mapping = dict() # stores the actual groups and sprites
-        self.widget_mapping = dict() # stores references to sprite groups and animations
+        self.widget_mapping = dict() # stores widget mapping of all animations and sprites belonging to a group
+        
 
         # adding a heading (lol that rhymes)
-        heading = Label(0.4, 0.05, 0.2, 0.08, self.app.settings["INPUT_FONT"], text = "Sprite Groups")
+        heading = Label(0.4, 0.05, 0.2, 0.08, self.app.settings["INPUT_FONT"], text = "Sprite/Animations")
         self.add_child(heading)
 
         # sprite card constants
@@ -32,47 +34,24 @@ class SpriteManager(ScrollableFrame):
         self.btn_size = 0.05
 
         self.add_btn = PixelButton(self.btn_x, self.btn_y, self.btn_size, self.btn_size, "res/OpenButton1/non_hovering.png",
-                                   border_radius = 15)
+                                   border_radius = 0)
         self.add_child(self.add_btn)
-        self.add_btn.set_command(lambda: self.app.ask_choice("Are you making a new group or adding a new sprite/animation to an existing group?", ["Group", "Sprite/Animation"], self.delegate_choice_creation))
+        self.add_btn.set_command(lambda: self.app.ask_choice("Are you adding a new sprite or an animation?", ["Sprite", "Animation"], self.delegate_choice_creation))
 
     def delegate_choice_creation(self):
         choice = self.app.get_choice()
 
-        if choice == "Group":
-            self.app.ask_input(["Group Name"], self.create_sprite_group)
+        if choice == "Sprite":
+            self.app.ask_input(["Which group?", "File Path", "Name", "Width", "Height"], lambda: self.validate_input(animation = False), persist = True)
         else:
-            self.app.ask_input(["Which group?"], self.delegate_choice_group)
+            self.app.ask_input(["Which group?", "File Path", "Name", "Frame Width", "Frame Height"], self.validate_input, persist = True)
 
-    def delegate_choice_group(self):
-        pass
-
-    def delegate_choice_loading(self):
-        pass
-
-    def create_sprite_group(self):
+    def validate_input(self, animation = True):
         output = self.app.get_input()
-
-        if not output.get("Group Name", None):
-            self.app.show_message("Internal Error, try again!", 2500)
-            return
-
-        if not output["Group Name"]:
-            self.app.show_message("Invalid group name!", 2500)
-            return 
         
-        if output["Group Name"].isdigit():
-            self.app.show_message("Group name cannot be a number!", 2500)
-            return        
-        
-        if self.sprite_mapping.get(output["Group Name"], None):
-            self.app.show_message("Group name is already taken!", 2500)
-            return
-        self.sprite_mapping[output["Group Name"]] = dict()
-        
-    def add_sprite_animation(self, name : str, group_name : str, fp : str, frame_width : int, frame_height : int):
+    def add_sprite_animation(self):
         pass
 
-    def add_sprite(self, name : str, group_name : str, fp : str, width : int, height : int):
+    def add_sprite(self):
         pass
 

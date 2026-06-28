@@ -47,7 +47,8 @@ class App:
         self.pop_up_choice = PopUpChoice(self.settings["INPUT_FONT"], self.anim_manager)
 
         self.docker.add_frame(self.settings["FILE_MANAGER_NAME"], "file_manager", app = self, docker = self.docker)
-        self.docker.add_frame(self.settings["SPRITE_MANAGER_NAME"], "sprite_manager", app = self)
+        self.docker.add_frame(self.settings["SPRITE_MANAGER_NAME"], "sprite_manager", app = self, docker = self.docker)
+        self.docker.add_frame(self.settings["SPRITE_GROUP_MANAGER_NAME"], "group_manager", app = self, docker = self.docker)
 
         self.independent_widgets = []
 
@@ -97,8 +98,8 @@ class App:
     def show_message(self, msg : str, time : int):
         self.pop_up_message.show_message(msg, time)
 
-    def ask_input(self, params : List[str], callback):
-        self.pop_up_window.ask_input(params, callback)
+    def ask_input(self, params : List[str], callback, persist = False):
+        self.pop_up_window.ask_input(params, callback, persist = persist)
 
     def get_input(self):
         return self.pop_up_window.output
@@ -109,6 +110,8 @@ class App:
     def ask_choice(self, msg : str, choices : List[str], callback):
         self.pop_up_choice.ask_choice(msg, choices, callback = callback)
 
+    def close_input(self):
+        self.pop_up_window.close()
 
 if __name__ == "__main__":
     a = App()

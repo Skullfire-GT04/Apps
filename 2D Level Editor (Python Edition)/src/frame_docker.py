@@ -2,6 +2,7 @@ import pygame as pg
 from utils.button import Button
 from .file_manager import FileManager
 from .sprite_manager import SpriteManager
+from .sprite_group_manager import SpriteGroupManager
 from .canvas import Canvas
 
 
@@ -17,7 +18,8 @@ class DockerFrame:
         self.frame_type_map = {
             "file_manager" : FileManager,
             "sprite_manager" : SpriteManager,
-            "canvas" : Canvas
+            "canvas" : Canvas,
+            "group_manager" : SpriteGroupManager
         }
 
     def add_frame(self, name : str, type_ : str, *args, **kwargs):

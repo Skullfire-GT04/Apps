@@ -5,5 +5,6 @@
     "INPUT_FONT" : "res/input_font.ttf",
     "APP_NAME" : "2D Map Editor",
     "SPRITE_MANAGER_NAME" : "Sprites",
-    "FILE_MANAGER_NAME" : "Files"
+    "FILE_MANAGER_NAME" : "Files",
+    "SPRITE_GROUP_MANAGER_NAME" : "Groups"
 }
