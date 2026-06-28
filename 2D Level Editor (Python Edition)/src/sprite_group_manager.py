@@ -16,9 +16,9 @@ class SpriteGroupManager(ScrollableFrame):
         self.add_child(heading)
 
         # constants
-        self.group_width = 0.8
-        self.group_height = 0.1
-        self.margin = 0.1
+        self.group_width = 0.45
+        self.group_height = 0.07
+        self.margin = 0.05
         self.btn_size = 0.05
 
         # variables
@@ -47,17 +47,27 @@ class SpriteGroupManager(ScrollableFrame):
             return
         
         index = len(self.groups) + 1
-        self.groups[name] = SpriteGroup(self.margin, self.group_card_y, self.group_height, name, index, self.app, self)
+        self.groups[name] = SpriteGroup(self.group_card_x, self.group_card_y, self.group_width, self.group_height, name, index, self.app, self)
         self.add_child(self.groups[name])
         self.app.close_input()
         self.change_coords()
 
     def change_coords(self, added = True, after_index = None):
         if added:
-            self.group_card_y += self.group_height + self.margin
-            self.add_btn.change_y(self.add_btn.y + self.margin + self.group_height)
+            self.group_card_x += self.group_width + self.margin
+
+            if self.group_card_x > 1 - (self.group_width + self.margin):
+                self.group_card_y += self.group_height + self.margin
+                self.group_card_x = self.margin
+
+            self.add_btn.change_x(self.group_card_x + (self.group_width / 2))
+            self.add_btn.change_y(self.group_card_y + (self.group_height / 2))
 
     def remove_group(self, name : str):
         pass
-
+    
+    def change_group_name(self, name : str, new_name : str):
+        data = self.groups[name]
+        del self.groups[name]
+        self.groups[new_name] = data
 

@@ -78,7 +78,7 @@ class FileManager(ScrollableFrame):
 
         file_card = None
         if choice == "Make New":
-            file_card = FileCard(self.file_card_x, self.file_card_y + self.delta, self.file_card_width, self.file_card_height, self.app.settings["MAIN_FONT"], name, save_location, self.app, self)
+            file_card = FileCard(self.file_card_x, self.file_card_y + self.delta, self.file_card_width, self.file_card_height, self.app.settings["INPUT_FONT"], name, save_location, self.app, self)
         else:
             file_card = self.load_file(path.join(save_location, name))
 
@@ -146,5 +146,6 @@ class FileManager(ScrollableFrame):
         data = self.files[name]
         del self.files[name]
         self.files[new_name] = data
+        self.docker.change_frame_name(name, new_name)
         
         
