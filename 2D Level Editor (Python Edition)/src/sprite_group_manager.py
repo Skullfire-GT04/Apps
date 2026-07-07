@@ -1,5 +1,6 @@
 import pygame as pg
 from utils import ScrollableFrame, Label, PixelButton
+from .card_utility import move_cards
 from .sprite_group import SpriteGroup
 
 
@@ -16,9 +17,9 @@ class SpriteGroupManager(ScrollableFrame):
         self.add_child(heading)
 
         # constants
-        self.group_width = 0.45
+        self.group_width = 0.44
         self.group_height = 0.07
-        self.margin = 0.05
+        self.margin = 0.04
         self.btn_size = 0.05
 
         # variables
@@ -47,7 +48,7 @@ class SpriteGroupManager(ScrollableFrame):
             return
         
         index = len(self.groups) + 1
-        self.groups[name] = SpriteGroup(self.group_card_x, self.group_card_y, self.group_width, self.group_height, name, index, self.app, self)
+        self.groups[name] = SpriteGroup(self.group_card_x, self.group_card_y + self.delta, self.group_width, self.group_height, name, index, self.app, self)
         self.add_child(self.groups[name])
         self.app.close_input()
         self.change_coords()
@@ -61,10 +62,30 @@ class SpriteGroupManager(ScrollableFrame):
                 self.group_card_x = self.margin
 
             self.add_btn.change_x(self.group_card_x + (self.group_width / 2))
-            self.add_btn.change_y(self.group_card_y + (self.group_height / 2))
+            self.add_btn.change_y(self.group_card_y + (self.group_height / 2) + self.delta)
+        else:
+            move_cards(after_index, list(self.groups.values()), self.add_btn, self.group_width, self.group_height, self.margin)
+
+            self.group_card_x -= round(self.group_width + self.margin, 2)
+            if self.group_card_x < self.margin:
+                max_cards = 1 // (self.group_width + self.margin)
+                self.group_card_x = round(self.margin * max_cards + self.group_width * (max_cards - 1), 2)
+                self.group_card_y -= round(self.group_height + self.margin, 2)
+
+    def ask_remove_group_card(self, name : str):
+        self.app.ask_choice("Are you sure? (Invincible meme lol) \nDeleting a group also results in un-loading all the animations associated with this particular groups.", ["Yes", "Nah"], lambda name=name: self.remove_group(name))
 
     def remove_group(self, name : str):
-        pass
+        choice = self.app.get_choice()
+        if choice == "Nah": return
+        index = list(self.groups.keys()).index(name)
+        self.delete_child(self.groups[name])
+        del self.groups[name]
+        self.change_coords(added = False, after_index = index)
+
+        temp = list(self.groups.values())
+        for i in range(index, len(self.groups)):
+            temp[i].set_index(i + 1)
     
     def change_group_name(self, name : str, new_name : str):
         data = self.groups[name]

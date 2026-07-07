@@ -25,7 +25,7 @@ class SpriteGroup(BorderFrame):
         self.remove_button = PixelButton(1 - 0.1, 0.1, 0.1, 0.8, "res/CloseButton1/non_hovering.png", border_radius = 10)
         self.remove_button.clr_settings["bg"] = "#EA3737"
         self.remove_button.clr_settings["btn_hvr_clr"] = "#6F1414"
-        self.remove_button.set_command(lambda: self.manager.remove_group(self.name))
+        self.remove_button.set_command(lambda: self.manager.ask_remove_group_card(self.name))
         self.add_child(self.remove_button)
 
         # edit name button
@@ -65,4 +65,6 @@ class SpriteGroup(BorderFrame):
         self.manager.change_group_name(self.name, self.name_input.text)
         self.name = self.name_input.text
 
+    def set_index(self, new_index : int):
+        self.index_label.set_text(str(new_index))
     

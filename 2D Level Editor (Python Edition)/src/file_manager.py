@@ -126,8 +126,7 @@ class FileManager(ScrollableFrame):
             self.file_card_x -= round(self.file_card_width + self.margin, 2)
             if self.file_card_x < self.margin:
                 max_cards = 1 // (self.file_card_width + self.margin)
-                new_x = round(self.margin * max_cards + (self.file_card_width * (max_cards - 1)), 2)
-                self.file_card_x = new_x
+                self.file_card_x = round(self.margin * max_cards + (self.file_card_width * (max_cards - 1)), 2)
                 self.file_card_y -= round(self.file_card_height + self.margin, 2)
 
 
