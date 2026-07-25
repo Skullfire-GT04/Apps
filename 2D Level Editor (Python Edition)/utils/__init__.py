@@ -11,3 +11,4 @@ from .scrollable_frame import ScrollableFrame
 from .PixelWidgets.pixel_button import PixelButton
 from .multiline_label import MultiLineLabel
 from .widget import Widget
+from .single_widget_scrollable_frame import SingleWidgetScrollableFrame
