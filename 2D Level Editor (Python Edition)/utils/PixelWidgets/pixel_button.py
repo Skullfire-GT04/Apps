@@ -34,8 +34,7 @@ class PixelButton(Button):
         img = self.images[0] if not self.hovering else self.images[1]
         if not img: img = self.images[0]
 
-        img_rect = img.get_rect(topleft = (self.rect.x, self.rect.y))
-        display.blit(img, img_rect)
+        display.blit(img, self.rect)
 
     def calc_new_rect(self):
         pos_x, pos_y = self.get_absolute_pos()

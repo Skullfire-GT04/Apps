@@ -17,7 +17,7 @@ TODO:
 import pygame as pg
 from typing import List
 from json import load
-from utils import Animation, MultiLineLabel
+from utils import Animation, MultiLineLabel, AnimatedButton
 from src import DockerFrame, PopUpWindow, PopUpMessage, PopUpChoice
 
 
@@ -51,6 +51,8 @@ class App:
         self.docker.add_frame(self.settings["SPRITE_GROUP_MANAGER_NAME"], "group_manager", app = self, docker = self.docker)
 
         self.independent_widgets = []
+        self.independent_widgets.append(AnimatedButton(0.3, 0.3, 0.2, 0.2))
+        self.independent_widgets[0].load_images("res/test/Bottle2/spritesheet.png", 48, 48)
 
     def load_main_settings(self):
         try:
@@ -64,10 +66,6 @@ class App:
     def run(self):
         while self.running:
             for event in pg.event.get():
-                # checking if the main_window was resized if so then changing the stand-alone widgets accordingly
-                if event.type == pg.VIDEORESIZE:
-                    for widget in self.independent_widgets:
-                        widget.calc_new_rect()
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False
 
@@ -75,10 +73,13 @@ class App:
                 self.pop_up_message.update(event)
                 self.pop_up_choice.update(event)
 
+                for widget in self.independent_widgets:
+                    widget.update(event)
+
                 # updating the current frame if no pop-up input field is active
                 if (not self.pop_up_window.active and not self.pop_up_choice.active) or event.type == pg.VIDEORESIZE:
                     self.docker.update(event)
-
+                
             # clearing the screen
             self.screen.fill("black")
 
@@ -90,6 +91,10 @@ class App:
             self.pop_up_window.draw(self.screen)
             self.pop_up_choice.draw(self.screen)
             self.pop_up_message.draw(self.screen)
+
+            for widget in self.independent_widgets:
+                widget.draw(self.screen)
+
 
             pg.display.update()
             self.clock.tick(self.settings["FPS"])
