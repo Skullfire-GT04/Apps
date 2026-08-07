@@ -51,8 +51,6 @@ class App:
         self.docker.add_frame(self.settings["SPRITE_GROUP_MANAGER_NAME"], "group_manager", app = self, docker = self.docker)
 
         self.independent_widgets = []
-        self.independent_widgets.append(AnimatedButton(0.3, 0.3, 0.2, 0.2))
-        self.independent_widgets[0].load_images("res/test/Bottle2/spritesheet.png", 48, 48)
 
     def load_main_settings(self):
         try:
@@ -91,9 +89,6 @@ class App:
             self.pop_up_window.draw(self.screen)
             self.pop_up_choice.draw(self.screen)
             self.pop_up_message.draw(self.screen)
-
-            for widget in self.independent_widgets:
-                widget.draw(self.screen)
 
 
             pg.display.update()

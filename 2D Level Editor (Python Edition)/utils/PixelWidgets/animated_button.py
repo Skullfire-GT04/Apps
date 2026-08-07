@@ -32,12 +32,12 @@ class AnimatedButton(Button):
     def load_images(self, img_path : str, frame_width : int, frame_height : int):
         img = pg.image.load(img_path).convert_alpha()
         self.original_images.clear()
-        for i in range(img.width // frame_width):
-            for j in  range(img.height // frame_height):
+        for i in range(img.get_height() // frame_width):
+            for j in  range(img.get_width() // frame_height):
                 temp = pg.Surface((frame_width, frame_height)).convert_alpha()
                 temp.set_colorkey((0, 0, 0))
-                temp.blit(img, area = (j * frame_width, i * frame_height, frame_width, frame_height))
-                self.original_images.append(temp)
+                temp.blit(img, (0, 0), (j * frame_width, i * frame_height, frame_width, frame_height))
+                self.original_images.append(temp.copy())
         self.calc_new_rect()
         self.next_change_time = -1
         self.current_frame = 0
