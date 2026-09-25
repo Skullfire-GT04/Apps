@@ -3,7 +3,7 @@ from .scrollable_frame import ScrollableFrame
 
 """
 This is essentially 
-aa scrollable frame which prevents overflowing widgets
+a scrollable frame which prevents overflowing widgets
 but only works if the frame contains only a single kind of widgets
 """
 

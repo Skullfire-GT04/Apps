@@ -38,7 +38,15 @@ class App:
 
         # flags
         self.input_pop_up = False
+
+
+        # adding a set of independent widgets for testing
+        self.independent_widgets = []
         
+        # temp = AnimatedButton(0.1, 0.1, 0.2, 0.24)
+        # temp.load_images("res/test/Bottle2/spritesheet.png", 48, 48)
+        # self.independent_widgets.append(temp)
+
         
         # adding default widgets and frames to the app
         self.docker = DockerFrame(self)
@@ -50,7 +58,6 @@ class App:
         self.docker.add_frame(self.settings["SPRITE_MANAGER_NAME"], "sprite_manager", app = self, docker = self.docker)
         self.docker.add_frame(self.settings["SPRITE_GROUP_MANAGER_NAME"], "group_manager", app = self, docker = self.docker)
 
-        self.independent_widgets = []
 
     def load_main_settings(self):
         try:
@@ -64,6 +71,11 @@ class App:
     def run(self):
         while self.running:
             for event in pg.event.get():
+
+                # updating the independent widgets 
+                for widget in self.independent_widgets:
+                    widget.update(event)
+                
                 if (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE) or event.type == pg.QUIT:
                     self.running = False
 
@@ -90,6 +102,8 @@ class App:
             self.pop_up_choice.draw(self.screen)
             self.pop_up_message.draw(self.screen)
 
+            for widget in self.independent_widgets:
+                widget.draw(self.screen)
 
             pg.display.update()
             self.clock.tick(self.settings["FPS"])

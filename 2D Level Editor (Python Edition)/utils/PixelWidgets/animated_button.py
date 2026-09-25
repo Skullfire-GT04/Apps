@@ -1,4 +1,5 @@
 import pygame as pg
+from os import path
 from ..button import Button
 
 
@@ -23,13 +24,16 @@ class AnimatedButton(Button):
         self.original_images = []
         self.images = []
         self.fps = 12 # this is what I thought looked best
+        self.min_fps = self.fps # again just a preference of mine change it if you want 
         self.frame_change_time = 1000 / self.fps
         self.current_frame = 0
         self.next_change_time = -1
         self.load_color_settings("button")
         self.calc_new_rect()
 
+    # sets the frames which are going to be displayed 
     def load_images(self, img_path : str, frame_width : int, frame_height : int):
+        if not path.exists(img_path): return
         img = pg.image.load(img_path).convert_alpha()
         self.original_images.clear()
         for i in range(img.get_height() // frame_width):
@@ -43,7 +47,7 @@ class AnimatedButton(Button):
         self.current_frame = 0
 
     def set_frame_rate(self, new_rate : int):
-        self.fps = new_rate if new_rate > 0 else self.fps
+        self.fps = new_rate if new_rate >= self.min_fps else self.fps
         self.frame_change_time = 1000 / self.fps
             
     def calc_new_rect(self):
